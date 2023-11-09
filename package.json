@@ -11,7 +11,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "GPLV3",
   "devDependencies": {
     "@swc/cli": "^0.1.62",
     "@swc/core": "^1.3.96",
