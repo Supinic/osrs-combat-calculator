@@ -1,0 +1,23 @@
+{
+  "selfSufficientRangedWeapons": {
+    "names": [
+      "Crystal bow",
+      "Craw's bow",
+      "Bow of faerdhinen"
+    ],
+    "categories": [
+      "Thrown",
+      "Chinchompas"
+    ]
+  },
+  "unconventionalWeaponAttackStyles": [
+    {
+      "name": "Abyssal bludgeon",
+      "attackStyles": [
+        { "name": "Pound", "type": "Crush", "style": "Aggressive" },
+        { "name": "Pummel", "type": "Crush", "style": "Aggressive" },
+        { "name": "Block", "type": "Crush", "style": "Aggressive" }
+      ]
+    }
+  ]
+}

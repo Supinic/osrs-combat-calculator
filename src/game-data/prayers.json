@@ -1,0 +1,96 @@
+{
+  "Clarity of Thought": {
+    "effects": {
+      "attack": 1.05
+    }
+  },
+  "Improved Reflexes": {
+    "effects": {
+      "attack": 1.10
+    }
+  },
+  "Incredible Reflexes": {
+    "effects": {
+      "attack": 1.15
+    }
+  },
+  "Burst of Strength": {
+    "effects": {
+      "strength": 1.05
+    }
+  },
+  "Superhuman Strength": {
+    "effects": {
+      "strength": 1.10
+    }
+  },
+  "Ultimate Strength": {
+    "effects": {
+      "strength": 1.15
+    }
+  },
+  "Chivalry": {
+    "effects": {
+      "attack": 1.15,
+      "strength": 1.18,
+      "defence": 1.20
+    }
+  },
+  "Piety": {
+    "effects": {
+      "attack": 1.20,
+      "strength": 1.23,
+      "defence": 1.25
+    }
+  },
+  "Mystic Will": {
+    "effects": {
+      "magicAttack": 1.05,
+      "magicDefence": 1.05
+    }
+  },
+  "Mystic Lore": {
+    "effects": {
+      "magicAttack": 1.10,
+      "magicDefence": 1.10
+    }
+  },
+  "Mystic Might": {
+    "effects": {
+      "magicAttack": 1.15,
+      "magicDefence": 1.15
+    }
+  },
+  "Augury": {
+    "effects": {
+      "magicAttack": 1.25,
+      "magicDefence": 1.25,
+      "defence": 1.25
+    }
+  },
+  "Sharp Eye": {
+    "effects": {
+      "rangedAttack": 1.05,
+      "rangedStrength": 1.05
+    }
+  },
+  "Hawk Eye": {
+    "effects": {
+      "rangedAttack": 1.10,
+      "rangedStrength": 1.10
+    }
+  },
+  "Eagle Eye": {
+    "effects": {
+      "rangedAttack": 1.15,
+      "rangedStrength": 1.15
+    }
+  },
+  "Rigour": {
+    "effects": {
+      "rangedAttack": 1.20,
+      "rangedStrength": 1.23,
+      "defence": 1.25
+    }
+  }
+}
