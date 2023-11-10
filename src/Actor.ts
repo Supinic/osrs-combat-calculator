@@ -26,6 +26,13 @@ export type ActorData = {
     boosts?: Iterable<BoostName>;
 };
 
+export type AttackData = {
+    vertex: "Melee" | "Ranged" | "Magic";
+    style: "Accurate" | "Aggressive" | "Controlled" | "Defensive" | "Rapid" | "Longrange";
+    type: "Slash" | "Stab" | "Crush" | "Ranged" | "Magic" | "Spell";
+    spell: string | null;
+};
+
 export class Actor {
     #name: string;
     #equipment: EquipmentDescriptor = {

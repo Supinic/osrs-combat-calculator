@@ -1,15 +1,8 @@
-import { Actor, ActorData, Levels } from "./Actor";
+import { Actor, ActorData, AttackData, Levels } from "./Actor";
 import { Equipment } from "./Equipment";
 
 import applyBoosts from "./Boosts";
 import getPrayerMultipliers from "./Prayers";
-
-type AttackData = {
-	vertex: "Melee" | "Ranged" | "Magic";
-	style: "Accurate" | "Aggressive" | "Controlled" | "Defensive" | "Rapid" | "Longrange";
-	type: "Slash" | "Stab" | "Crush" | "Ranged" | "Magic" | "Spell";
-	spell: string | null;
-};
 
 const defaultAttackerLevels: Levels = {
 	attack: 99,
