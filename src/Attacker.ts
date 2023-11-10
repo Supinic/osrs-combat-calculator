@@ -51,8 +51,6 @@ export class Attacker extends Actor {
 		const boostedLevels = applyBoosts(this.levels, this.boosts);
 		const prayerMultipliers = getPrayerMultipliers(this.prayers);
 
-		console.log({boostedLevels, prayerMultipliers});
-
 		if (this.#attack.vertex === "Melee") {
 			accuracy.stance = 8;
 			strength.stance = 8;
