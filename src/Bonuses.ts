@@ -6,22 +6,24 @@ export type BonusType = "stabAttack" | "slashAttack" | "crushAttack" | "magicAtt
     | "strength" | "rangedStrength" | "magicStrength"
     | "prayer";
 
-// const bonusIndex = {
-//     stabAttack: 0,
-//     slashAttack: 1,
-//     crushAttack: 2,
-//     magicAttack: 3,
-//     rangedAttack: 4,
-//     stabDefence: 5,
-//     slashDefence: 6,
-//     crushDefence: 7,
-//     magicDefence: 8,
-//     rangedDefence: 9,
-//     strength: 10,
-//     rangedStrength: 11,
-//     magicStrength: 12,
-//     prayer: 13
-// } as const;
+const bonusIndex = {
+    stabAttack: 0,
+    slashAttack: 1,
+    crushAttack: 2,
+    magicAttack: 3,
+    rangedAttack: 4,
+    stabDefence: 5,
+    slashDefence: 6,
+    crushDefence: 7,
+    magicDefence: 8,
+    rangedDefence: 9,
+    strength: 10,
+    rangedStrength: 11,
+    magicStrength: 12,
+    prayer: 13
+} as const;
+
+export type BonusObject = Record<keyof typeof bonusIndex, number>;
 
 export class Bonuses {
     #list: BonusList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -59,6 +61,17 @@ export class Bonuses {
     get magicStrength () { return this.#list[12]; }
 
     get prayer () { return this.#list[13]; }
+
+    static fromObject (data: Partial<BonusObject>): BonusList {
+        const result = Bonuses.getEmptyList();
+        for (const [untypedStat, value] of Object.entries(data)) {
+            const stat = untypedStat as keyof BonusObject;
+            const index = bonusIndex[stat];
+            result[index] = value;
+        }
+
+        return result;
+    }
 
     static getEmptyList (): BonusList {
         return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
