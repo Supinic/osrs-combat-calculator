@@ -55,7 +55,7 @@ export class Attacker extends Actor {
 
 		if (this.#attack.vertex === "Melee") {
 			accuracy.stance = 8;
-			strength.stance = 0;
+			strength.stance = 8;
 
 			if (this.#attack.style === "Accurate") {
 				accuracy.stance += 3;
@@ -85,7 +85,7 @@ export class Attacker extends Actor {
 		}
 		else if (this.#attack.vertex === "Ranged") {
 			accuracy.stance = 8;
-			strength.stance = 0;
+			strength.stance = 8;
 
 			if (this.#attack.style === "Accurate") {
 				accuracy.stance += 3;
