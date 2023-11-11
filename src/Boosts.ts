@@ -36,8 +36,7 @@ export default function apply (levels: Readonly<Levels>, appliedBoostNames: Set<
 	for (const boostName of appliedBoostNames) {
 		const boostData = boosts[boostName] as BoostDefinition;
 		if (!boostData) {
-			console.warn("Invalid boost found", boostName);
-			continue;
+			throw new Error(`Invalid boost provided: ${boostName}`);
 		}
 
 		const boostedStats = applySingleBoost(levels, boostData);
