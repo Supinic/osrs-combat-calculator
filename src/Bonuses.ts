@@ -1,11 +1,6 @@
 type Bonus = number;
 export type BonusList = [Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus];
 
-export type BonusType = "stabAttack" | "slashAttack" | "crushAttack" | "magicAttack" | "rangedAttack"
-    | "stabDefence" | "slashDefence" | "crushDefence" | "magicDefence" | "rangedDefence"
-    | "strength" | "rangedStrength" | "magicStrength"
-    | "prayer";
-
 const bonusIndex = {
     stabAttack: 0,
     slashAttack: 1,
@@ -23,7 +18,8 @@ const bonusIndex = {
     prayer: 13
 } as const;
 
-export type BonusObject = Record<keyof typeof bonusIndex, number>;
+export type BonusType = keyof typeof bonusIndex;
+export type BonusObject = Record<BonusType, number>;
 
 export class Bonuses {
     #list: BonusList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];

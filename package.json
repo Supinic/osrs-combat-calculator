@@ -7,7 +7,8 @@
     "watch": "swc src -w --out-dir dist",
     "build": "swc src -d dist --copy-files",
     "dev": "yarn run build && node ./dist/index.js",
-    "devtools": "yarn run build && node --inspect-brk=0.0.0.0:10005 ./dist/index.js"
+    "devtools": "yarn run build && node --inspect-brk=0.0.0.0:10005 ./dist/index.js",
+    "test": "yarn run build && node --test"
   },
   "keywords": [],
   "author": "",

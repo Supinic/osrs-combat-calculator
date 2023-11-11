@@ -1,0 +1,54 @@
+{
+  "name": "Sotetseg",
+  "setup": {
+    "attacker": {
+      "attack": {
+        "vertex": "Melee",
+        "style": "Aggressive",
+        "type": "Crush",
+        "spell": null
+      }
+    },
+    "defender": {
+      "id": 8387,
+      "name": "Sotetseg",
+      "baseBonuses": {
+        "stabDefence": 70,
+        "slashDefence": 70,
+        "crushDefence": 70,
+        "magicDefence": 30,
+        "rangedDefence": 150
+      },
+      "levels": {
+        "hitpoints": 4000,
+        "defence": 200,
+        "magic": 250
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "name": "Punching",
+      "attacker": {},
+      "defender": {},
+      "expected": {
+        "attackRoll": 6848,
+        "defendRoll": 28006,
+        "maxHit": 11,
+        "accuracy": 0.12225
+      }
+    },
+    {
+      "name": "Punching with Piety",
+      "attacker": {
+        "prayers": ["Piety"]
+      },
+      "expected": {
+        "attackRoll": 8064,
+        "defendRoll": 28006,
+        "maxHit": 13,
+        "accuracy": 0.14396
+      }
+    }
+  ]
+}
