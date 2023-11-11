@@ -19,6 +19,8 @@ export type EquipmentDescriptor = Record<Slot, Equipment | null>;
 export type Flags = Record<string, boolean>;
 
 export type ActorData = {
+    id?: number;
+    size?: number;
     equipment?: Partial<Record<InputSlot, EquipmentDefinition>>,
     levels?: Partial<Levels>;
     baseBonuses?: BonusList;
@@ -34,7 +36,10 @@ export type AttackData = {
 };
 
 export class Actor {
+    #id: number;
     #name: string;
+    #size: number;
+
     #equipment: EquipmentDescriptor = {
         head: null,
         neck: null,
@@ -58,7 +63,7 @@ export class Actor {
         prayer: 1,
         mining: 1
     };
-    #baseBonuses: Bonuses = new Bonuses();
+    #baseBonuses = new Bonuses();
     #totalBonuses: Bonuses;
 
     #boosts: Set<BoostName> = new Set(); //Boosts;
@@ -66,7 +71,10 @@ export class Actor {
     #flags: Flags = {};
 
     constructor (name: string, data: ActorData) {
+        this.#id = data.id ?? -1;
         this.#name = name;
+        this.#size = data.size ?? 1;
+
         if (data.equipment) {
             for (const definition of Object.values(data.equipment)) {
                 const equipment = new Equipment(definition);
