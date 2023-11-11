@@ -1,5 +1,5 @@
 {
-  "name": "Sotetseg",
+  "name": "Punching Sotetseg",
   "setup": {
     "attacker": {
       "attack": {
@@ -28,18 +28,20 @@
   },
   "scenarios": [
     {
-      "name": "Punching",
+      "name": "No boost",
       "attacker": {},
       "defender": {},
       "expected": {
         "attackRoll": 6848,
         "defendRoll": 28006,
         "maxHit": 11,
-        "accuracy": 0.12225
+        "accuracy": 0.12225,
+        "averageDamage": 0.67240,
+        "dps": 0.28016
       }
     },
     {
-      "name": "Punching with Piety",
+      "name": "Piety",
       "attacker": {
         "prayers": ["Piety"]
       },
@@ -47,7 +49,24 @@
         "attackRoll": 8064,
         "defendRoll": 28006,
         "maxHit": 13,
-        "accuracy": 0.14396
+        "accuracy": 0.14396,
+        "averageDamage": 0.93576,
+        "dps": 0.38990
+      }
+    },
+    {
+      "name": "Piety + Super combat",
+      "attacker": {
+        "prayers": ["Piety"],
+        "boosts": ["Super combat"]
+      },
+      "expected": {
+        "attackRoll": 9536,
+        "defendRoll": 28006,
+        "maxHit": 16,
+        "accuracy": 0.1702,
+        "averageDamage": 1.36194,
+        "dps": 0.56747
       }
     }
   ]

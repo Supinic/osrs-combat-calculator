@@ -1,14 +1,16 @@
-import * as definitions from "./scenarios/index";
 import { describe, it } from "node:test";
+import { strictEqual } from "node:assert";
 
 import { Attacker } from "../Attacker";
 import { Defender } from "../Defender";
-import {compareAccuracyRolls, generalAccuracyFormula, generalMaxHitFormula, round} from "../utils";
-import { strictEqual } from "node:assert";
+import { compareAccuracyRolls, generalAccuracyFormula, generalMaxHitFormula, round } from "../utils";
 import { AttackData, Levels } from "../Actor";
 import { BoostName } from "../Boosts";
 import { PrayerName } from "../Prayers";
 import { Bonuses, BonusList, BonusObject } from "../Bonuses";
+import { HitTracker } from "../HitTracker";
+
+import * as definitions from "./scenarios/index"
 
 type ActorTestDefinition = {
     baseBonuses?: BonusList | Partial<BonusObject>;
@@ -34,6 +36,8 @@ type TestDefinition = {
             defendRoll?: number;
             maxHit?: number;
             accuracy?: number;
+            averageDamage?: number;
+            dps?: number;
         }
     }[];
 };
@@ -81,6 +85,10 @@ for (const definition of Object.values(definitions)) {
             const maxHit = generalMaxHitFormula(a.strength.level + a.strength.stance, a.strength.bonus);
             const accuracy = compareAccuracyRolls(attackRoll, defendRoll);
 
+            const ht = HitTracker.createBasicDistribution(accuracy, maxHit);
+            const averageDamage = ht.getAverageDamage();
+            const dps = averageDamage / a.speed / 0.6;
+
             it(scenario.name, function () {
                 if (scenario.expected.attackRoll) {
                     strictEqual(scenario.expected.attackRoll, attackRoll);
@@ -91,9 +99,13 @@ for (const definition of Object.values(definitions)) {
                 if (scenario.expected.maxHit) {
                     strictEqual(scenario.expected.maxHit, maxHit);
                 }
-                if (scenario.expected.accuracy) {
-                    const rounded = round(accuracy, 5);
-                    strictEqual(scenario.expected.accuracy, rounded);
+                if (scenario.expected.averageDamage) {
+                    const rounded = round(averageDamage, 5);
+                    strictEqual(scenario.expected.averageDamage, rounded);
+                }
+                if (scenario.expected.dps) {
+                    const rounded = round(dps, 5);
+                    strictEqual(scenario.expected.dps, rounded);
                 }
             });
         }

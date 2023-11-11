@@ -30,6 +30,15 @@ class Distribution extends Map<Damage, Chance> {
         return new Distribution(this);
     }
 
+    getAverageDamage () {
+        let damage = 0;
+        for (const [hit, p] of this.entries()) {
+            damage += hit * p;
+        }
+
+        return damage;
+    }
+
     clear () {
         this.#maxHit = 0;
         return super.clear();
@@ -146,6 +155,27 @@ export class HitTracker {
 
      */
 
+    getAverageDamage () {
+        let damage = 0;
+        const dists = [this.#distribution, ...this.#extraDists];
+        for (const dist of dists) {
+            damage += dist.getAverageDamage();
+        }
+
+        return damage;
+    }
+
+    getMaxHit () {
+        let maxHit = this.#distribution.maxHit;
+        for (const dist of this.#extraDists) {
+            if (dist.maxHit > maxHit) {
+                maxHit = dist.maxHit;
+            }
+        }
+
+        return maxHit;
+    }
+
     clear () {
         this.#distribution.clear();
         for (const dist of this.#extraDists) {
@@ -174,7 +204,6 @@ export class HitTracker {
         return dist;
     }
 }
-
 
 /*
 export class MultiHitTracker {
