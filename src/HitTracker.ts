@@ -22,7 +22,7 @@ class Distribution extends Map<Damage, Chance> {
         //     }
         // }
 
-        const previousP: Chance = this.get(hit) ?? 0;
+        const previousP = this.get(hit) ?? 0;
         this.set(hit, previousP + p);
     }
 

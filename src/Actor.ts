@@ -1,3 +1,5 @@
+import spells from "./game-data/spells.json";
+
 import { Bonuses, BonusList } from "./Bonuses";
 import { InputSlot, Slot, Equipment, Definition as EquipmentDefinition } from "./Equipment";
 import { BoostName } from "./Boosts";
@@ -28,11 +30,12 @@ export type ActorData = {
     boosts?: Iterable<BoostName>;
 };
 
+export type SpellName = keyof typeof spells;
 export type AttackData = {
     vertex: "Melee" | "Ranged" | "Magic";
     style: "Accurate" | "Aggressive" | "Controlled" | "Defensive" | "Rapid" | "Longrange";
     type: "Slash" | "Stab" | "Crush" | "Ranged" | "Magic" | "Spell";
-    spell: string | null;
+    spell: SpellName | null;
 };
 
 export class Actor {

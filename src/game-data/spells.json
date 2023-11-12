@@ -1,0 +1,215 @@
+{
+  "Wind Strike": {
+    "maxHit": 2,
+    "spellbook": "standard"
+  },
+  "Water Strike": {
+    "maxHit": 4,
+    "spellbook": "standard"
+  },
+  "Earth Strike": {
+    "maxHit": 6,
+    "spellbook": "standard"
+  },
+  "Fire Strike": {
+    "maxHit": 8,
+    "spellbook": "standard"
+  },
+  "Wind Bolt": {
+    "maxHit": 9,
+    "spellbook": "standard"
+  },
+  "Water Bolt": {
+    "maxHit": 10,
+    "spellbook": "standard"
+  },
+  "Earth Bolt": {
+    "maxHit": 11,
+    "spellbook": "standard"
+  },
+  "Fire Bolt": {
+    "maxHit": 12,
+    "spellbook": "standard"
+  },
+  "Wind Blast": {
+    "maxHit": 13,
+    "spellbook": "standard"
+  },
+  "Water Blast": {
+    "maxHit": 14,
+    "spellbook": "standard"
+  },
+  "Earth Blast": {
+    "maxHit": 15,
+    "spellbook": "standard"
+  },
+  "Fire Blast": {
+    "maxHit": 16,
+    "spellbook": "standard"
+  },
+  "Wind Wave": {
+    "maxHit": 17,
+    "spellbook": "standard"
+  },
+  "Water Wave": {
+    "maxHit": 18,
+    "spellbook": "standard"
+  },
+  "Earth Wave": {
+    "maxHit": 19,
+    "spellbook": "standard"
+  },
+  "Fire Wave": {
+    "maxHit": 20,
+    "spellbook": "standard"
+  },
+  "Wind Surge": {
+    "maxHit": 21,
+    "spellbook": "standard"
+  },
+  "Water Surge": {
+    "maxHit": 22,
+    "spellbook": "standard"
+  },
+  "Earth Surge": {
+    "maxHit": 23,
+    "spellbook": "standard"
+  },
+  "Fire Surge": {
+    "maxHit": 24,
+    "spellbook": "standard"
+  },
+  "Iban Blast": {
+    "maxHit": 25,
+    "spellbook": "standard"
+  },
+  "Magic Dart": {
+    "maxHit": 0,
+    "spellbook": "standard"
+  },
+  "Saradomin Strike": {
+    "maxHit": 20,
+    "spellbook": "standard",
+    "flags": [
+      "god"
+    ]
+  },
+  "Flames of Zamorak": {
+    "maxHit": 20,
+    "spellbook": "standard",
+    "flags": [
+      "god"
+    ]
+  },
+  "Claws of Guthix": {
+    "maxHit": 20,
+    "spellbook": "standard",
+    "flags": [
+      "god"
+    ]
+  },
+  "Crumble Undead": {
+    "maxHit": 15,
+    "spellbook": "standard"
+  },
+  "Smoke Rush": {
+    "maxHit": 14,
+    "spellbook": "ancient"
+  },
+  "Shadow Rush": {
+    "maxHit": 15,
+    "spellbook": "ancient"
+  },
+  "Blood Rush": {
+    "maxHit": 16,
+    "spellbook": "ancient"
+  },
+  "Ice Rush": {
+    "maxHit": 17,
+    "spellbook": "ancient"
+  },
+  "Smoke Burst": {
+    "maxHit": 18,
+    "spellbook": "ancient"
+  },
+  "Shadow Burst": {
+    "maxHit": 19,
+    "spellbook": "ancient"
+  },
+  "Blood Burst": {
+    "maxHit": 21,
+    "spellbook": "ancient"
+  },
+  "Ice Burst": {
+    "maxHit": 22,
+    "spellbook": "ancient"
+  },
+  "Smoke Blitz": {
+    "maxHit": 23,
+    "spellbook": "ancient"
+  },
+  "Shadow Blitz": {
+    "maxHit": 24,
+    "spellbook": "ancient"
+  },
+  "Blood Blitz": {
+    "maxHit": 25,
+    "spellbook": "ancient"
+  },
+  "Ice Blitz": {
+    "maxHit": 26,
+    "spellbook": "ancient"
+  },
+  "Smoke Barrage": {
+    "maxHit": 27,
+    "spellbook": "ancient"
+  },
+  "Shadow Barrage": {
+    "maxHit": 28,
+    "spellbook": "ancient"
+  },
+  "Blood Barrage": {
+    "maxHit": 29,
+    "spellbook": "ancient"
+  },
+  "Ice Barrage": {
+    "maxHit": 30,
+    "spellbook": "ancient"
+  },
+  "Inferior Demonbane": {
+    "maxHit": 16,
+    "spellbook": "arceuus",
+    "flags": [
+      "demon only",
+      "mark of darkness"
+    ]
+  },
+  "Superior Demonbane": {
+    "maxHit": 23,
+    "spellbook": "arceuus",
+    "flags": [
+      "demon only",
+      "mark of darkness"
+    ]
+  },
+  "Dark Demonbane": {
+    "maxHit": 30,
+    "spellbook": "arceuus",
+    "flags": [
+      "demon only",
+      "mark of darkness"
+    ]
+  },
+  "Ghostly Grasp": {
+    "maxHit": 12,
+    "spellbook": "arceuus"
+  },
+  "Skeletal Grasp": {
+    "maxHit": 17,
+    "spellbook": "arceuus"
+  },
+  "Undead Grasp": {
+    "maxHit": 24,
+    "spellbook": "arceuus"
+  }
+}
