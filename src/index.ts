@@ -1,8 +1,8 @@
-import { Actor, AttackData } from "./Actor";
+import { AttackData } from "./Actor";
 import { Attacker } from "./Attacker";
 import { Defender } from "./Defender";
-import { generalAccuracyFormula, generalMaxHitFormula } from "./utils";
-import { Bonuses } from "./Bonuses";
+import { compareAccuracyRolls, generalAccuracyFormula, generalMaxHitFormula } from "./utils";
+import { HitTracker } from "./HitTracker";
 
 const attackData: AttackData = {
     vertex: "Melee",
@@ -15,7 +15,7 @@ const att = new Attacker(
     "Tester",
     {
         boosts: [],
-        prayers: []
+        "prayers": ["Piety"]
     },
     attackData
 )
@@ -28,12 +28,19 @@ const def = new Defender(
 const a = att.output();
 const d = def.output(attackData.type);
 
-const defenceRoll = generalAccuracyFormula(d.base, d.bonus);
+const defendRoll = generalAccuracyFormula(d.base, d.bonus);
 const attackRoll = generalAccuracyFormula(a.accuracy.level + a.accuracy.stance, a.accuracy.bonus);
-const maxHit = generalMaxHitFormula(a.strength.level + a.strength.stance, a.strength.bonus);
+const baseMaxHit = generalMaxHitFormula(a.strength.level + a.strength.stance, a.strength.bonus);
+const accuracy = compareAccuracyRolls(attackRoll, defendRoll);
+
+const ht = HitTracker.createBasicDistribution(accuracy, baseMaxHit);
+const averageDamage = ht.getAverageDamage();
+const dps = averageDamage / a.speed / 0.6
 
 console.log({
-    defenceRoll,
+    defendRoll,
     attackRoll,
-    maxHit
+    baseMaxHit,
+    averageDamage,
+    dps
 });
