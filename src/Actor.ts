@@ -20,6 +20,11 @@ export type Levels = {
 export type EquipmentDescriptor = Record<Slot, Equipment | null>;
 export type Flags = Record<string, boolean>;
 
+export type Attribute = "dragon"
+    | "fiery" | "spectral" | "kalphite"
+    | "vampyre" | "demon" | "shade" | "leafy"
+    | "undead" | "penance" | "xerician"
+
 export type ActorData = {
     id?: number;
     size?: number;
@@ -28,6 +33,7 @@ export type ActorData = {
     baseBonuses?: BonusList;
     prayers?: Iterable<PrayerName>;
     boosts?: Iterable<BoostName>;
+    attributes?: Iterable<Attribute>;
 };
 
 export type SpellName = keyof typeof spells;
@@ -69,8 +75,9 @@ export class Actor {
     #baseBonuses = new Bonuses();
     #totalBonuses: Bonuses;
 
-    #boosts: Set<BoostName> = new Set(); //Boosts;
-    #prayers: Set<PrayerName> = new Set(); // Prayers;
+    #boosts: Set<BoostName> = new Set();
+    #prayers: Set<PrayerName> = new Set();
+    #attributes: Set<Attribute> = new Set();
     #flags: Flags = {};
 
     constructor (name: string, data: ActorData) {
@@ -113,12 +120,19 @@ export class Actor {
         if (data.prayers) {
             this.#prayers = new Set(data.prayers);
         }
+        if (data.attributes) {
+            this.#attributes = new Set(data.attributes);
+        }
     }
 
     get totalBonuses () { return this.#totalBonuses; }
     get boosts () { return this.#boosts; }
     get equipment () { return this.#equipment; }
+    get attributes () { return this.#attributes; }
     get prayers () { return this.#prayers; }
     get levels () { return this.#levels; }
     get flags () { return this.#flags; }
+    get size () { return this.#size; }
+    get id () { return this.#id; }
+    get name () { return this.#name; }
 }
