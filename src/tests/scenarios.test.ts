@@ -9,6 +9,7 @@ import { BoostName } from "../Boosts";
 import { PrayerName } from "../Prayers";
 import { Bonuses, BonusList, BonusObject } from "../Bonuses";
 import { HitTracker } from "../HitTracker";
+import spells from "../game-data/spells.json";
 
 import * as definitions from "./scenarios/index"
 
@@ -47,7 +48,10 @@ for (const definition of Object.values(definitions)) {
 
     describe(name, function () {
         for (const scenario of scenarios) {
-            const attack = scenario.attacker.attack ?? setup.attacker.attack;
+            const attack = {
+                ...(scenario.attacker.attack ?? {}),
+                ...(setup.attacker.attack ?? {})
+            };
 
             const attackerBonuses = scenario.attacker?.baseBonuses ?? setup.attacker.baseBonuses ?? Bonuses.getEmptyList();
             const defenderBonuses = scenario.defender?.baseBonuses ?? setup.defender.baseBonuses ?? Bonuses.getEmptyList();
@@ -82,8 +86,20 @@ for (const definition of Object.values(definitions)) {
 
             const defendRoll = generalAccuracyFormula(d.base, d.bonus);
             const attackRoll = generalAccuracyFormula(a.accuracy.level + a.accuracy.stance, a.accuracy.bonus);
-            const maxHit = generalMaxHitFormula(a.strength.level + a.strength.stance, a.strength.bonus);
             const accuracy = compareAccuracyRolls(attackRoll, defendRoll);
+
+            let maxHit: number;
+            if (attack.type === "Magic" || attack.type === "Spell") {
+                if (attack.spell) {
+                    maxHit = spells[attack.spell].maxHit;
+                }
+                else {
+                    maxHit = 0; // @todo generic magic max hit
+                }
+            }
+            else {
+                maxHit = generalMaxHitFormula(a.strength.level + a.strength.stance, a.strength.bonus);
+            }
 
             const ht = HitTracker.createBasicDistribution(accuracy, maxHit);
             const averageDamage = ht.getAverageDamage();
@@ -91,21 +107,25 @@ for (const definition of Object.values(definitions)) {
 
             it(scenario.name, function () {
                 if (scenario.expected.attackRoll) {
-                    strictEqual(scenario.expected.attackRoll, attackRoll);
+                    strictEqual(scenario.expected.attackRoll, attackRoll, "Incorrect attack roll");
                 }
                 if (scenario.expected.defendRoll) {
-                    strictEqual(scenario.expected.defendRoll, defendRoll);
+                    strictEqual(scenario.expected.defendRoll, defendRoll, "Incorrect defend roll");
                 }
                 if (scenario.expected.maxHit) {
-                    strictEqual(scenario.expected.maxHit, maxHit);
+                    strictEqual(scenario.expected.maxHit, maxHit, "Incorrect max hit");
+                }
+                if (scenario.expected.accuracy) {
+                    const rounded = round(accuracy, 5);
+                    strictEqual(scenario.expected.accuracy, rounded, "Incorrect accuracy");
                 }
                 if (scenario.expected.averageDamage) {
                     const rounded = round(averageDamage, 5);
-                    strictEqual(scenario.expected.averageDamage, rounded);
+                    strictEqual(scenario.expected.averageDamage, rounded, "Incorrect average damage");
                 }
                 if (scenario.expected.dps) {
                     const rounded = round(dps, 5);
-                    strictEqual(scenario.expected.dps, rounded);
+                    strictEqual(scenario.expected.dps, rounded, "Incorrect DPS");
                 }
             });
         }

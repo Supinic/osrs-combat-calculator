@@ -1,0 +1,75 @@
+{
+  "name": "Basic magic",
+  "setup": {
+    "attacker": {
+      "attack": {
+        "vertex": "Magic",
+        "style": "Accurate",
+        "type": "Spell"
+      }
+    },
+    "defender": {
+      "id": 8387,
+      "name": "Sotetseg",
+      "baseBonuses": {
+        "stabDefence": 70,
+        "slashDefence": 70,
+        "crushDefence": 70,
+        "magicDefence": 30,
+        "rangedDefence": 150
+      },
+      "levels": {
+        "hitpoints": 4000,
+        "defence": 200,
+        "magic": 250
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "name": "Wind Strike",
+      "attacker": {
+        "attack": {
+          "spell": "Wind Strike"
+        }
+      },
+      "defender": {},
+      "expected": {
+        "attackRoll": 6912,
+        "defendRoll": 24346,
+        "accuracy": 0.14194,
+        "maxHit": 2
+      }
+    },
+    {
+      "name": "Fire Strike",
+      "attacker": {
+        "attack": {
+          "spell": "Fire Strike"
+        }
+      },
+      "defender": {},
+      "expected": {
+        "attackRoll": 6912,
+        "defendRoll": 24346,
+        "accuracy": 0.14194,
+        "maxHit": 8
+      }
+    },
+    {
+      "name": "Fire Surge",
+      "attacker": {
+        "attack": {
+          "spell": "Fire Surge"
+        }
+      },
+      "defender": {},
+      "expected": {
+        "attackRoll": 6912,
+        "defendRoll": 24346,
+        "accuracy": 0.14194,
+        "maxHit": 24
+      }
+    }
+  ]
+}

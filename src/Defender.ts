@@ -10,8 +10,8 @@ export class Defender extends Actor {
 
 		let base;
 		let bonus;
-		if (attackType === "Magic") {
-			bonus = this.totalBonuses.magicDefence
+		if (attackType === "Magic" || attackType === "Spell") {
+			bonus = this.totalBonuses.magicDefence;
 			base = Math.floor(boostedLevels.magic * prayerMultipliers.magicDefence) + 9;
 		}
 		else {
@@ -20,7 +20,6 @@ export class Defender extends Actor {
 				case "Slash": bonus = this.totalBonuses.slashDefence; break;
 				case "Crush": bonus = this.totalBonuses.crushDefence; break;
 				case "Ranged": bonus = this.totalBonuses.rangedDefence; break;
-				default: throw new Error(`Unknown attack type provided: ${attackType}`);
 			}
 
 			base = Math.floor(boostedLevels.defence * prayerMultipliers.defence) + 9;
