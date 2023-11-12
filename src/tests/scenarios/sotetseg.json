@@ -1,12 +1,16 @@
 {
   "name": "Punching Sotetseg",
   "setup": {
+    "vertex": {
+      "class": "Melee",
+      "style": "Aggressive",
+      "type": "Crush",
+      "spell": null
+    },
     "attacker": {
-      "attack": {
-        "vertex": "Melee",
-        "style": "Aggressive",
-        "type": "Crush",
-        "spell": null
+      "levels": {
+        "attack": 99,
+        "strength": 99
       }
     },
     "defender": {
@@ -29,8 +33,6 @@
   "scenarios": [
     {
       "name": "No boost",
-      "attacker": {},
-      "defender": {},
       "expected": {
         "attackRoll": 6848,
         "defendRoll": 28006,

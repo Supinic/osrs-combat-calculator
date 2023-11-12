@@ -1,11 +1,14 @@
 {
   "name": "Basic magic",
   "setup": {
+    "vertex": {
+      "class": "Magic",
+      "style": "Accurate",
+      "type": "Spell"
+    },
     "attacker": {
-      "attack": {
-        "vertex": "Magic",
-        "style": "Accurate",
-        "type": "Spell"
+      "levels": {
+        "magic": 99
       }
     },
     "defender": {
@@ -28,12 +31,9 @@
   "scenarios": [
     {
       "name": "Wind Strike",
-      "attacker": {
-        "attack": {
-          "spell": "Wind Strike"
-        }
+      "vertex": {
+        "spell": "Wind Strike"
       },
-      "defender": {},
       "expected": {
         "attackRoll": 6912,
         "defendRoll": 24346,
@@ -43,12 +43,9 @@
     },
     {
       "name": "Fire Strike",
-      "attacker": {
-        "attack": {
-          "spell": "Fire Strike"
-        }
+      "vertex": {
+        "spell": "Fire Strike"
       },
-      "defender": {},
       "expected": {
         "attackRoll": 6912,
         "defendRoll": 24346,
@@ -58,12 +55,9 @@
     },
     {
       "name": "Fire Surge",
-      "attacker": {
-        "attack": {
-          "spell": "Fire Surge"
-        }
+      "vertex": {
+        "spell": "Fire Surge"
       },
-      "defender": {},
       "expected": {
         "attackRoll": 6912,
         "defendRoll": 24346,
