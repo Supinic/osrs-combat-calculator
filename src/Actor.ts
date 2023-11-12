@@ -3,7 +3,7 @@ import spells from "./game-data/spells.json";
 import { Bonuses, BonusList } from "./Bonuses";
 import { InputSlot, Slot, Equipment, Definition as EquipmentDefinition } from "./Equipment";
 import applyBoosts, { BoostName } from "./Boosts";
-import getPrayerMultipliers, { PrayerName } from "./Prayers";
+import getPrayerMultipliers, { BoostableStat, PrayerName } from "./Prayers";
 
 type Level = number;
 export type Levels = {
@@ -73,8 +73,10 @@ export class Actor {
         prayer: 1,
         mining: 1
     };
+    #boostedLevels: Levels;
+    #prayerMultipliers: Record<BoostableStat, number>;
     #baseBonuses = new Bonuses();
-    #totalBonuses: Bonuses;
+    #bonuses: Bonuses;
 
     #boosts: Set<BoostName> = new Set();
     #prayers: Set<PrayerName> = new Set();
@@ -104,15 +106,15 @@ export class Actor {
             this.#baseBonuses = new Bonuses(data.baseBonuses);
         }
 
-        this.#totalBonuses = new Bonuses();
-        this.#totalBonuses.add(this.#baseBonuses);
+        this.#bonuses = new Bonuses();
+        this.#bonuses.add(this.#baseBonuses);
 
         for (const item of Object.values(this.#equipment)) {
             if (item === null) {
                 continue;
             }
 
-            this.#totalBonuses.add(item.bonuses);
+            this.#bonuses.add(item.bonuses);
         }
 
         if (data.boosts) {
@@ -124,6 +126,9 @@ export class Actor {
         if (data.attributes) {
             this.#attributes = new Set(data.attributes);
         }
+
+        this.#boostedLevels = applyBoosts(this.#levels, this.#boosts);
+        this.#prayerMultipliers = getPrayerMultipliers(this.#prayers);
     }
 
     getAttackValues (vertex: Vertex) {
@@ -139,8 +144,8 @@ export class Actor {
             stance: 0
         };
 
-        const boostedLevels = applyBoosts(this.#levels, this.#boosts);
-        const prayerMultipliers = getPrayerMultipliers(this.#prayers);
+        const boostedLevels = this.#boostedLevels;
+        const prayerMultipliers = this.#prayerMultipliers;
 
         if (vertex.class === "Melee") {
             accuracy.stance = 8;
@@ -161,16 +166,16 @@ export class Actor {
             strength.level = Math.floor(boostedLevels.strength * prayerMultipliers.strength);
 
             if (vertex.type === "Stab") {
-                accuracy.bonus = this.totalBonuses.stabAttack;
+                accuracy.bonus = this.#bonuses.stabAttack;
             }
             else if (vertex.type === "Slash") {
-                accuracy.bonus = this.totalBonuses.slashAttack;
+                accuracy.bonus = this.#bonuses.slashAttack;
             }
             else if (vertex.type === "Crush") {
-                accuracy.bonus = this.totalBonuses.crushAttack;
+                accuracy.bonus = this.#bonuses.crushAttack;
             }
 
-            strength.bonus = this.totalBonuses.strength;
+            strength.bonus = this.#bonuses.strength;
         }
         else if (vertex.class === "Ranged") {
             accuracy.stance = 8;
@@ -186,8 +191,8 @@ export class Actor {
             accuracy.level = Math.floor(boostedLevels.ranged * prayerMultipliers.rangedAttack);
             strength.level = Math.floor(boostedLevels.ranged * prayerMultipliers.rangedStrength);
 
-            accuracy.bonus = this.totalBonuses.rangedAttack;
-            strength.bonus = this.totalBonuses.rangedStrength;
+            accuracy.bonus = this.#bonuses.rangedAttack;
+            strength.bonus = this.#bonuses.rangedStrength;
         }
         else if (vertex.class === "Magic") {
             accuracy.stance = 9;
@@ -203,8 +208,8 @@ export class Actor {
             accuracy.level = Math.floor(boostedLevels.magic * prayerMultipliers.magicAttack);
             strength.level = 0; // Magic level does not provide any inherent bonus to magic damage
 
-            accuracy.bonus = this.totalBonuses.magicAttack;
-            strength.bonus = this.totalBonuses.magicStrength;
+            accuracy.bonus = this.#bonuses.magicAttack;
+            strength.bonus = this.#bonuses.magicStrength;
         }
         else {
             throw new Error(`Invalid vertex class: ${vertex.class}`);
@@ -218,21 +223,21 @@ export class Actor {
     }
 
     getDefendValues (vertex: Vertex) {
-        const boostedLevels = applyBoosts(this.levels, this.boosts);
-        const prayerMultipliers = getPrayerMultipliers(this.prayers);
+        const boostedLevels = this.#boostedLevels;
+        const prayerMultipliers = this.#prayerMultipliers;
 
         let base;
         let bonus;
         if (vertex.type === "Magic" || vertex.type === "Spell") {
-            bonus = this.totalBonuses.magicDefence;
+            bonus = this.#bonuses.magicDefence;
             base = Math.floor(boostedLevels.magic * prayerMultipliers.magicDefence) + 9;
         }
         else {
             switch (vertex.type) {
-                case "Stab": bonus = this.totalBonuses.stabDefence; break;
-                case "Slash": bonus = this.totalBonuses.slashDefence; break;
-                case "Crush": bonus = this.totalBonuses.crushDefence; break;
-                case "Ranged": bonus = this.totalBonuses.rangedDefence; break;
+                case "Stab": bonus = this.#bonuses.stabDefence; break;
+                case "Slash": bonus = this.#bonuses.slashDefence; break;
+                case "Crush": bonus = this.#bonuses.crushDefence; break;
+                case "Ranged": bonus = this.#bonuses.rangedDefence; break;
             }
 
             base = Math.floor(boostedLevels.defence * prayerMultipliers.defence) + 9;
@@ -244,12 +249,13 @@ export class Actor {
         };
     }
 
-    get totalBonuses () { return this.#totalBonuses; }
+    get bonuses () { return this.#bonuses; }
     get boosts () { return this.#boosts; }
     get equipment () { return this.#equipment; }
     get attributes () { return this.#attributes; }
     get prayers () { return this.#prayers; }
     get levels () { return this.#levels; }
+    get boostedLevels () { return this.#boostedLevels; }
     get flags () { return this.#flags; }
     get size () { return this.#size; }
     get id () { return this.#id; }
