@@ -1,19 +1,21 @@
 import { describe, it } from "node:test";
 import { strictEqual } from "node:assert";
 
-import * as definitions from "./scenarios/index"
+import * as definitions from "./scenarios/index";
 import { Bonuses, BonusList, BonusObject } from "../Bonuses";
 import { Levels, Vertex } from "../Actor";
 import { BoostName } from "../Boosts";
 import { PrayerName } from "../Prayers";
 import { calculate } from "../index";
 import { round } from "../utils";
+import { Definition as EquipmentDefinition, Slot as EquipmentSlot } from "../Equipment";
 
 type ActorTestDefinition = {
     baseBonuses?: BonusList | Partial<BonusObject>;
     levels?: Partial<Levels>;
     boosts?: BoostName[];
     prayers?: PrayerName[];
+    equipment?: Record<EquipmentSlot, EquipmentDefinition>;
 };
 
 type TestDefinition = {
@@ -59,7 +61,8 @@ for (const definition of Object.values(definitions)) {
                         : Bonuses.fromObject(attackerBonuses),
                     levels: scenario.attacker?.levels ?? setup.attacker?.levels ?? {},
                     boosts: scenario.attacker?.boosts ?? setup.attacker?.boosts ?? [],
-                    prayers: scenario.attacker?.prayers ?? setup.attacker?.prayers ?? []
+                    prayers: scenario.attacker?.prayers ?? setup.attacker?.prayers ?? [],
+                    equipment: scenario.attacker?.equipment ?? setup.attacker?.equipment ?? {}
                 },
                 defender: {
                     baseBonuses: (Array.isArray(defenderBonuses))
@@ -67,7 +70,8 @@ for (const definition of Object.values(definitions)) {
                         : Bonuses.fromObject(defenderBonuses),
                     levels: scenario.defender?.levels ?? setup.defender?.levels ?? {},
                     boosts: scenario.defender?.boosts ?? setup.defender?.boosts ?? [],
-                    prayers: scenario.defender?.prayers ?? setup.defender?.prayers ?? []
+                    prayers: scenario.defender?.prayers ?? setup.defender?.prayers ?? [],
+                    equipment: scenario.defender?.equipment ?? setup.defender?.equipment ?? {}
                 },
                 vertex
             });

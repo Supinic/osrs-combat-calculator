@@ -3,6 +3,7 @@ import spells from "./game-data/spells.json";
 import * as utils from "./utils";
 import { HitTracker } from "./HitTracker";
 import { Actor, ActorData, Vertex } from "./Actor";
+import ModifierManager from "./Modifiers";
 
 type Input = {
     attacker: ActorData;
@@ -15,6 +16,8 @@ export function calculate (options: Input) {
     const defender = new Actor(options.defender);
 
     const { vertex } = options;
+    const modifiers = new ModifierManager(attacker, defender, vertex);
+
     const atk = attacker.getAttackValues(vertex);
     const def = defender.getDefendValues(vertex);
 
@@ -28,15 +31,20 @@ export function calculate (options: Input) {
             maxHit = spells[vertex.spell].maxHit;
         }
         else {
-            maxHit = 0; // @todo generic magic max hit
+            const baseMaxHit = modifiers.determineBaseMaxHit();
+            if (baseMaxHit === null) {
+                throw new Error("No base max hit determined");
+            }
+
+            maxHit = baseMaxHit;
         }
     }
     else {
         maxHit = utils.generalMaxHitFormula(atk.strength.level + atk.strength.stance, atk.strength.bonus);
     }
 
-    const ht = HitTracker.createBasicDistribution(accuracy, maxHit);
-    const averageDamage = ht.getAverageDamage();
+    const tracker = HitTracker.createBasicDistribution(accuracy, maxHit);
+    const averageDamage = tracker.getAverageDamage();
     const dps = averageDamage / atk.speed / 0.6;
 
     return {

@@ -1,8 +1,4 @@
-type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T];
-
-export function typeEntries<T extends object>(t: T): Entries<T>[] {
-    return Object.entries(t) as Entries<T>[];
-}
+export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] }
 
 export function generalAccuracyFormula (a: number, b: number) {
     return a * (b + 64);

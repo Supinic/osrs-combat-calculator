@@ -1,7 +1,9 @@
 import { Bonuses, BonusList } from "./Bonuses";
 import AttackStyles from "./game-data/attack-styles.json";
 
-export type Slot = "cape" | "head" | "neck" | "ammo" | "weapon" | "shield" | "body" | "legs" | "hands" | "feet" | "ring";
+const slots = ["cape", "head", "neck", "ammo", "weapon", "shield", "body", "legs", "hands", "feet", "ring"] as const;
+
+export type Slot = typeof slots[number];
 export type InputSlot = Slot | "2h";
 
 export type WeaponCategory = keyof (typeof AttackStyles);
@@ -72,5 +74,10 @@ export class Equipment {
 
     static get fallbackWeaponSpeed () {
         return 4;
+    }
+
+    static isValidSlot (slot: string): slot is Slot {
+        // @ts-ignore
+        return slots.includes(slot);
     }
 }

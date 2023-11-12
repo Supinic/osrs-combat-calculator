@@ -1,0 +1,105 @@
+{
+  "name": "Powered staves",
+  "setup": {
+    "vertex": {
+      "class": "Magic",
+      "style": "Accurate",
+      "type": "Magic"
+    },
+    "attacker": {
+      "levels": {
+        "magic": 99
+      }
+    },
+    "defender": {}
+  },
+  "scenarios": [
+    {
+      "name": "Trident @ 75 magic",
+      "attacker": {
+        "levels": {
+          "magic": 75
+        },
+        "equipment": {
+          "weapon": {
+            "name": "Trident of the seas"
+          }
+        }
+      },
+      "expected": {
+        "maxHit": 20
+      }
+    },
+    {
+      "name": "Trident @ 99 magic",
+      "attacker": {
+        "equipment": {
+          "weapon": {
+            "name": "Trident of the seas"
+          }
+        }
+      },
+      "expected": {
+        "maxHit": 28
+      }
+    },
+    {
+      "name": "Tox. Trident @ 78 magic",
+      "attacker": {
+        "levels": {
+          "magic": 78
+        },
+        "equipment": {
+          "weapon": {
+            "name": "Trident of the swamp"
+          }
+        }
+      },
+      "expected": {
+        "maxHit": 24
+      }
+    },
+    {
+      "name": "Tox. Trident @ 99 magic",
+      "attacker": {
+        "equipment": {
+          "weapon": {
+            "name": "Trident of the swamp"
+          }
+        }
+      },
+      "expected": {
+        "maxHit": 31
+      }
+    },
+    {
+      "name": "Sang @ 82 magic",
+      "attacker": {
+        "levels": {
+          "magic": 82
+        },
+        "equipment": {
+          "weapon": {
+            "name": "Sanguinesti staff"
+          }
+        }
+      },
+      "expected": {
+        "maxHit": 26
+      }
+    },
+    {
+      "name": "Sang @ 99 magic",
+      "attacker": {
+        "equipment": {
+          "weapon": {
+            "name": "Sanguinesti staff"
+          }
+        }
+      },
+      "expected": {
+        "maxHit": 32
+      }
+    }
+  ]
+}

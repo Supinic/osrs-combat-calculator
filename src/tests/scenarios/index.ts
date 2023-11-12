@@ -1,3 +1,4 @@
 // @ts-nocheck
-export * as sotetseg from "./sotetseg.json";
-export * as basicMagic from "./basic-magic.json";
+export * as sote from "./sotetseg.json";
+export * as baseMagic from "./basic-magic.json";
+export * as powerStaves from "./powered-staves.json";

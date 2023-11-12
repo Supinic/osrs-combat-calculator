@@ -29,7 +29,7 @@ export type ActorData = {
     id?: number;
     name?: string;
     size?: number;
-    equipment?: Partial<Record<InputSlot, EquipmentDefinition>>,
+    equipment?: Partial<Record<InputSlot, EquipmentDefinition>>;
     levels?: Partial<Levels>;
     baseBonuses?: BonusList;
     prayers?: Iterable<PrayerName>;
@@ -89,9 +89,12 @@ export class Actor {
         this.#size = data.size ?? 1;
 
         if (data.equipment) {
-            for (const definition of Object.values(data.equipment)) {
-                const equipment = new Equipment(definition);
-                this.#equipment[equipment.slot] = equipment;
+            for (const [slot, definition] of Object.entries(data.equipment)) {
+                if (!Equipment.isValidSlot(slot)) {
+                    throw new Error(`Invalid slot provided: ${slot}`);
+                }
+
+                this.#equipment[slot] = new Equipment(definition);
             }
         }
 
