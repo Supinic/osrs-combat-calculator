@@ -273,6 +273,29 @@ export class Actor {
         };
     }
 
+    checkEquipmentNames (data: Partial<Record<Slot, string | RegExp>>): boolean {
+        for (const [slot, check] of Object.entries(data)) {
+            const piece = this.#equipment[slot as Slot];
+            if (!piece) {
+                return false;
+            }
+
+            let result: boolean;
+            if (typeof check === "string" ) {
+                result = (piece.name === check);
+            }
+            else {
+                result = check.test(piece.name);
+            }
+
+            if (!result) {
+                return result;
+            }
+        }
+
+        return true;
+    }
+
     get bonuses () { return this.#bonuses; }
     get boosts () { return this.#boosts; }
     get combatLevel () { return this.#combatLevel; }
