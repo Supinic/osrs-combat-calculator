@@ -1,11 +1,11 @@
 export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] }
 
-export function generalAccuracyFormula (a: number, b: number) {
-    return a * (b + 64);
+export function generalAccuracyFormula (level: number, bonus: number) {
+    return level * (bonus + 64);
 }
 
-export function generalMaxHitFormula (a: number, b: number) {
-    return Math.floor(0.5 + a * (b + 64) / 640);
+export function generalMaxHitFormula (level: number, bonus: number) {
+    return Math.floor(0.5 + level * (bonus + 64) / 640);
 }
 
 export function compareAccuracyRolls (atk: number, def: number) {
