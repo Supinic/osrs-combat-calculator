@@ -1,7 +1,7 @@
 import * as definitions from "./modifiers/index";
 import Modifier from "./modifiers/template";
 import { Actor, AttackValues, DefendValues, Vertex } from "./Actor";
-import { HitTracker } from "./HitTracker";
+import { CombatValues } from "./index";
 
 export type Context = {
     attacker: Actor;
@@ -128,11 +128,11 @@ export default class ModifierManager {
         return maxHit;
     }
 
-    modifyDamageDistribution (tracker: HitTracker): HitTracker {
-        let result = tracker;
+    modifyDamageDistribution (combatValues: CombatValues): CombatValues {
+        let result = combatValues;
         for (const modifier of this.#list) {
             if (typeof modifier.damageDistribution === "function") {
-                result = modifier.damageDistribution(result, this.#context);
+                result = modifier.damageDistribution(combatValues, this.#context);
             }
         }
 

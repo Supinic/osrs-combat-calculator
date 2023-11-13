@@ -1,5 +1,5 @@
 import { Context } from "../Modifiers";
-import { HitTracker } from "../HitTracker";
+import { CombatValues } from "../index";
 // import { SpecialHitTracker } from "../SpecialHitTracker";
 
 export default interface TemplateModifier {
@@ -16,7 +16,7 @@ export default interface TemplateModifier {
     flatMaxHitBonus?: (context: Context) => number;
     baseMaxHit?: (context: Context) => number;
     attackSpeed?: (speed: number, context: Context) => number;
-    damageDistribution?: (tracker: HitTracker, context: Context) => HitTracker;
+    damageDistribution?: (tracker: CombatValues, context: Context) => CombatValues;
 
     // specialAttack?: (baseTracker: HitTracker, context: Context) => SpecialHitTracker;
 

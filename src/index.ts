@@ -10,6 +10,14 @@ type Input = {
     defender: ActorData;
     vertex: Vertex;
 };
+export type CombatValues = {
+    tracker: HitTracker;
+    attackRoll: number;
+    defendRoll: number;
+    maxHit: number;
+    maxHitProc?: number;
+    accuracy: number;
+};
 
 export function calculate (options: Input) {
     const attacker = new Actor(options.attacker);
@@ -52,17 +60,25 @@ export function calculate (options: Input) {
     maxHit += modifiers.getFlatMaxHitBonus();
     maxHit = modifiers.modifyMaxHit(maxHit);
 
-    const baseTracker = HitTracker.createBasicDistribution(accuracy, maxHit);
-    const tracker = modifiers.modifyDamageDistribution(baseTracker);
+    const tracker = HitTracker.createBasicDistribution(accuracy, maxHit);
+    const result = modifiers.modifyDamageDistribution({
+        tracker,
+        attackRoll,
+        defendRoll,
+        maxHit,
+        accuracy
+    });
 
-    const averageDamage = tracker.getAverageDamage();
+    const averageDamage = result.tracker.getAverageDamage();
     const dps = averageDamage / atk.speed / 0.6;
     return {
         defendRoll,
         attackRoll,
-        accuracy: tracker.getAccuracy(),
+        accuracy: result.accuracy,
         averageDamage,
         dps,
-        maxHit: tracker.getMaxHitData()
+        maxHit: result.maxHit,
+        maxHitProc: result.maxHitProc ?? null,
+        tracker: result.tracker
     };
 }
