@@ -100,6 +100,70 @@
       "expected": {
         "maxHit": 32
       }
+    },
+    {
+      "name": "Thammaron's sceptre @ 60 magic",
+      "attacker": {
+        "levels": {
+          "magic": 60
+        },
+        "equipment": {
+          "weapon": {
+            "name": "Thammaron's sceptre"
+          }
+        }
+      },
+      "expected": {
+        "maxHit": 12
+      }
+    },
+    {
+      "name": "Thammaron's sceptre @ 99 magic",
+      "attacker": {
+        "levels": {
+          "magic": 99
+        },
+        "equipment": {
+          "weapon": {
+            "name": "Thammaron's sceptre"
+          }
+        }
+      },
+      "expected": {
+        "maxHit": 25
+      }
+    },
+    {
+      "name": "Accursed sceptre @ 70 magic",
+      "attacker": {
+        "levels": {
+          "magic": 70
+        },
+        "equipment": {
+          "weapon": {
+            "name": "Accursed sceptre"
+          }
+        }
+      },
+      "expected": {
+        "maxHit": 17
+      }
+    },
+    {
+      "name": "Accursed sceptre @ 99 magic",
+      "attacker": {
+        "levels": {
+          "magic": 99
+        },
+        "equipment": {
+          "weapon": {
+            "name": "Accursed sceptre"
+          }
+        }
+      },
+      "expected": {
+        "maxHit": 27
+      }
     }
   ]
 }

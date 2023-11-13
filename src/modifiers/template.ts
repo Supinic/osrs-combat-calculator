@@ -1,5 +1,6 @@
 import { Context } from "../Modifiers";
 import { HitTracker } from "../HitTracker";
+// import { SpecialHitTracker } from "../SpecialHitTracker";
 
 export default interface TemplateModifier {
     accuracy?: (acc: number, context: Context) => number;
@@ -16,6 +17,8 @@ export default interface TemplateModifier {
     baseMaxHit?: (context: Context) => number;
     attackSpeed?: (speed: number, context: Context) => number;
     damageDistribution?: (tracker: HitTracker, context: Context) => HitTracker;
+
+    // specialAttack?: (baseTracker: HitTracker, context: Context) => SpecialHitTracker;
 
     isApplied: (context: Context) => boolean;
 }

@@ -25,10 +25,6 @@ const definitions = [
         formula: (magic: number) => Math.floor(magic / 3) - 1
     },
     {
-        names: ["Dawnbringer"],
-        formula: (magic: number) => Math.floor(magic / 6) - 1
-    },
-    {
         names: ["Crystal staff (basic)", "Corrupted staff (basic)"],
         formula: () => 23
     },
