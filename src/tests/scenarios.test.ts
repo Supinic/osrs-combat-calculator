@@ -34,6 +34,7 @@ type TestDefinition = {
             attackRoll?: number;
             defendRoll?: number;
             maxHit?: number;
+            maxHitProc?: number;
             maxHitList?: number[];
             accuracy?: number;
             averageDamage?: number;
@@ -52,8 +53,8 @@ for (const definition of Object.values(definitions)) {
     describe(name, function () {
         for (const scenario of scenarios) {
             const vertex = {
-                ...(scenario.vertex ?? {}),
-                ...(setup.vertex ?? {})
+                ...(setup.vertex ?? {}),
+                ...(scenario.vertex ?? {})
             } as Vertex;
 
             const attackerBonuses = scenario.attacker?.baseBonuses ?? setup.attacker?.baseBonuses ?? Bonuses.getEmptyList();
@@ -90,10 +91,13 @@ for (const definition of Object.values(definitions)) {
                     strictEqual(result.defendRoll, expected.defendRoll, "Incorrect defend roll");
                 }
                 if (isNumber(expected.maxHit)) {
-                    strictEqual(result.maxHit.max, expected.maxHit, "Incorrect max hit");
+                    strictEqual(result.maxHit, expected.maxHit, "Incorrect max hit");
+                }
+                if (isNumber(expected.maxHitProc)) {
+                    strictEqual(result.maxHitProc, expected.maxHitProc, "Incorrect proc max hit");
                 }
                 if (expected.maxHitList) {
-                    deepEqual(result.maxHit.list, expected.maxHitList, "Incorrect max hit list");
+                    deepEqual(result.tracker.getMaxHitData().list, expected.maxHitList, "Incorrect max hit list");
                 }
                 if (isNumber(expected.accuracy)) {
                     const rounded = round(result.accuracy, 5);
