@@ -1,5 +1,5 @@
 import { describe, it } from "node:test";
-import { strictEqual } from "node:assert";
+import { strictEqual, deepEqual } from "node:assert";
 
 import * as definitions from "./scenarios/index";
 import { Bonuses, BonusList, BonusObject } from "../Bonuses";
@@ -34,11 +34,16 @@ type TestDefinition = {
             attackRoll?: number;
             defendRoll?: number;
             maxHit?: number;
+            maxHitList?: number[];
             accuracy?: number;
             averageDamage?: number;
             dps?: number;
         }
     }[];
+};
+
+const isNumber = (input: any): input is number => {
+    return (typeof input === "number");
 };
 
 for (const definition of Object.values(definitions)) {
@@ -77,26 +82,30 @@ for (const definition of Object.values(definitions)) {
             });
 
             it(scenario.name, function () {
-                if (scenario.expected.attackRoll) {
-                    strictEqual(result.attackRoll, scenario.expected.attackRoll, "Incorrect attack roll");
+                const { expected } = scenario;
+                if (isNumber(expected.attackRoll)) {
+                    strictEqual(result.attackRoll, expected.attackRoll, "Incorrect attack roll");
                 }
-                if (scenario.expected.defendRoll) {
-                    strictEqual(result.defendRoll, scenario.expected.defendRoll, "Incorrect defend roll");
+                if (isNumber(expected.defendRoll)) {
+                    strictEqual(result.defendRoll, expected.defendRoll, "Incorrect defend roll");
                 }
-                if (scenario.expected.maxHit) {
-                    strictEqual(result.maxHit, scenario.expected.maxHit, "Incorrect max hit");
+                if (isNumber(expected.maxHit)) {
+                    strictEqual(result.maxHit.max, expected.maxHit, "Incorrect max hit");
                 }
-                if (scenario.expected.accuracy) {
+                if (expected.maxHitList) {
+                    deepEqual(result.maxHit.list, expected.maxHitList, "Incorrect max hit list");
+                }
+                if (isNumber(expected.accuracy)) {
                     const rounded = round(result.accuracy, 5);
-                    strictEqual(rounded, scenario.expected.accuracy, "Incorrect accuracy");
+                    strictEqual(rounded, expected.accuracy, "Incorrect accuracy");
                 }
-                if (scenario.expected.averageDamage) {
+                if (isNumber(expected.averageDamage)) {
                     const rounded = round(result.averageDamage, 5);
-                    strictEqual(rounded, scenario.expected.averageDamage, "Incorrect average damage");
+                    strictEqual(rounded, expected.averageDamage, "Incorrect average damage");
                 }
-                if (scenario.expected.dps) {
+                if (isNumber(expected.dps)) {
                     const rounded = round(result.dps, 5);
-                    strictEqual(rounded, scenario.expected.dps, "Incorrect DPS");
+                    strictEqual(rounded, expected.dps, "Incorrect DPS");
                 }
             });
         }
