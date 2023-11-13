@@ -1,0 +1,95 @@
+{
+  "name": "Ahrim's set",
+  "setup": {
+    "vertex": {
+      "class": "Magic",
+      "style": "Accurate",
+      "type": "Spell",
+      "spell": "Fire Surge"
+    },
+    "attacker": {
+      "levels": {
+        "magic": 99
+      },
+      "equipment": {
+        "neck": {
+          "name": "Amulet of the damned"
+        },
+        "weapon":  {
+          "name": "Ahrim's staff",
+          "bonuses": [12, -1, 65, 15, 0, 3, 5, 2, 15, 0, 68, 0, 0.05, 0]
+        },
+        "body":  {
+          "name": "Ahrim's robetop"
+        },
+        "legs":  {
+          "name": "Ahrim's robeskirt"
+        },
+        "head":  {
+          "name": "Ahrim's hood"
+        }
+      }
+    },
+    "defender": {
+      "id": 1676,
+      "name": "Torag the Corrupted",
+      "baseBonuses": {
+        "stabDefence": 221,
+        "slashDefence": 235,
+        "crushDefence": 222,
+        "magicDefence": 0,
+        "rangedDefence": 221
+      },
+      "levels": {
+        "hitpoints": 100,
+        "defence": 100,
+        "magic": 1
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "name": "Regular spellcasting",
+      "expected": {
+        "maxHit": 24,
+        "maxHitProc": 31
+      }
+    },
+    {
+      "name": "Melee - shouldn't apply (Accurate)",
+      "vertex": {
+        "class": "Melee",
+        "style": "Accurate",
+        "type": "Crush",
+        "spell": null
+      },
+      "attacker": {
+        "levels": {
+          "strength": 50
+        }
+      },
+      "expected": {
+        "maxHit": 12,
+        "maxHitProc": null
+      }
+    },
+    {
+      "name": "Melee - shouldn't apply (Aggressive)",
+      "vertex": {
+        "class": "Melee",
+        "style": "Aggressive",
+        "type": "Crush",
+        "spell": null
+      },
+      "attacker": {
+        "levels": {
+          "strength": 50
+        }
+      },
+      "expected": {
+        "maxHit": 13,
+        "maxHitProc": null
+      }
+    }
+  ]
+}
