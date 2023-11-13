@@ -18,12 +18,18 @@ export function calculate (options: Input) {
     const { vertex } = options;
     const modifiers = new ModifierManager(attacker, defender, vertex);
 
-    const atk = attacker.getAttackValues(vertex);
-    const def = defender.getDefendValues(vertex);
+    const baseAtk = attacker.getAttackValues(vertex);
+    const baseDef = defender.getDefendValues(vertex);
+    const atk = modifiers.modifyAttackValues(baseAtk);
+    const def = modifiers.modifyDefendValues(baseDef);
 
-    const defendRoll = utils.generalAccuracyFormula(def.base, def.bonus);
-    const attackRoll = utils.generalAccuracyFormula(atk.accuracy.level + atk.accuracy.stance, atk.accuracy.bonus);
-    const accuracy = utils.compareAccuracyRolls(attackRoll, defendRoll);
+    const baseAttackRoll = utils.generalAccuracyFormula(atk.attack.level + atk.attack.stance, atk.attack.bonus);
+    const baseDefendRoll = utils.generalAccuracyFormula(def.level, def.bonus);
+    const attackRoll = modifiers.modifyAttackRoll(baseAttackRoll);
+    const defendRoll = modifiers.modifyDefendRoll(baseDefendRoll);
+
+    const baseAccuracy = utils.compareAccuracyRolls(attackRoll, defendRoll);
+    const accuracy = modifiers.modifyAccuracy(baseAccuracy);
 
     let maxHit: number;
     if (vertex.type === "Magic" || vertex.type === "Spell") {
@@ -43,16 +49,20 @@ export function calculate (options: Input) {
         maxHit = utils.generalMaxHitFormula(atk.strength.level + atk.strength.stance, atk.strength.bonus);
     }
 
-    const tracker = HitTracker.createBasicDistribution(accuracy, maxHit);
+    maxHit += modifiers.getFlatMaxHitBonus();
+    maxHit = modifiers.modifyMaxHit(maxHit);
+
+    const baseTracker = HitTracker.createBasicDistribution(accuracy, maxHit);
+    const tracker = modifiers.modifyDamageDistribution(baseTracker);
+
     const averageDamage = tracker.getAverageDamage();
     const dps = averageDamage / atk.speed / 0.6;
-
     return {
         defendRoll,
         attackRoll,
-        accuracy,
-        maxHit, // @todo make sure to re-check the resulting HitTracker's maxHit
+        accuracy: tracker.getAccuracy(),
         averageDamage,
-        dps
+        dps,
+        maxHit: tracker.getMaxHitData()
     };
 }

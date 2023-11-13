@@ -2,6 +2,7 @@ type Chance = number;
 type Damage = number;
 
 class Distribution extends Map<Damage, Chance> {
+    #missChance: Chance = 0;
     #maxHit: Damage = 0;
 
     store (hit: Damage, p: Chance): void {
@@ -44,6 +45,9 @@ class Distribution extends Map<Damage, Chance> {
         return super.clear();
     }
 
+    get missChance (): Chance { return this.#missChance; }
+    set missChance (p: Chance) { this.#missChance = p; }
+
     get maxHit (): Damage { return this.#maxHit; }
 }
 
@@ -55,10 +59,10 @@ export class HitTracker {
     #extraDists: Distribution[] = [];
 
     constructor (accuracy: Chance) {
-        this.storeSingle(0, 1 - accuracy);
-
         this.#missChance = 1 - accuracy;
         this.#hitChance = accuracy;
+
+        this.#distribution.missChance = this.#missChance;
     }
 
     storeSingle (hit: Damage, p: Chance) {
@@ -165,15 +169,21 @@ export class HitTracker {
         return damage;
     }
 
-    getMaxHit () {
-        let maxHit = this.#distribution.maxHit;
-        for (const dist of this.#extraDists) {
-            if (dist.maxHit > maxHit) {
-                maxHit = dist.maxHit;
-            }
-        }
+    getMaxHitData () {
+        const list = [
+            this.#distribution.maxHit,
+            ...this.#extraDists.map(i => i.maxHit)
+        ];
 
-        return maxHit;
+        return {
+            max: Math.max(...list),
+            sum: list.reduce((acc, cum) => acc + cum, 0),
+            list
+        };
+    }
+
+    getAccuracy () {
+        return this.#hitChance;
     }
 
     clear () {

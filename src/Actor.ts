@@ -29,6 +29,7 @@ export type ActorData = {
     id?: number;
     name?: string;
     size?: number;
+    combatLevel?: number;
     equipment?: Partial<Record<InputSlot, EquipmentDefinition>>;
     levels?: Partial<Levels>;
     baseBonuses?: BonusList;
@@ -45,10 +46,29 @@ export type Vertex = {
     spell: SpellName | null;
 };
 
+export type AttackValues = {
+    attack: {
+        level: number;
+        bonus: number;
+        stance: number;
+    };
+    strength: {
+        level: number;
+        bonus: number;
+        stance: number;
+    };
+    speed: number;
+};
+export type DefendValues = {
+    level: number;
+    bonus: number;
+};
+
 export class Actor {
     #id: number;
     #name: string;
     #size: number;
+    #combatLevel: number;
 
     #equipment: EquipmentDescriptor = {
         head: null,
@@ -87,6 +107,7 @@ export class Actor {
         this.#id = data.id ?? -1;
         this.#name = data.name ?? "Combatant";
         this.#size = data.size ?? 1;
+        this.#combatLevel = data.combatLevel ?? 1;
 
         if (data.equipment) {
             for (const [slot, definition] of Object.entries(data.equipment)) {
@@ -134,9 +155,9 @@ export class Actor {
         this.#prayerMultipliers = getPrayerMultipliers(this.#prayers);
     }
 
-    getAttackValues (vertex: Vertex) {
+    getAttackValues (vertex: Vertex): AttackValues {
         let speed = this.#equipment.weapon?.speed ?? Equipment.fallbackWeaponSpeed;
-        const accuracy = {
+        const attack = {
             level: 0,
             bonus: 0,
             stance: 0
@@ -151,67 +172,67 @@ export class Actor {
         const prayerMultipliers = this.#prayerMultipliers;
 
         if (vertex.class === "Melee") {
-            accuracy.stance = 8;
+            attack.stance = 8;
             strength.stance = 8;
 
             if (vertex.style === "Accurate") {
-                accuracy.stance += 3;
+                attack.stance += 3;
             }
             else if (vertex.style === "Controlled") {
-                accuracy.stance += 1;
+                attack.stance += 1;
                 strength.stance += 1;
             }
             else if (vertex.style === "Aggressive") {
                 strength.stance += 3;
             }
 
-            accuracy.level = Math.floor(boostedLevels.attack * prayerMultipliers.attack);
+            attack.level = Math.floor(boostedLevels.attack * prayerMultipliers.attack);
             strength.level = Math.floor(boostedLevels.strength * prayerMultipliers.strength);
 
             if (vertex.type === "Stab") {
-                accuracy.bonus = this.#bonuses.stabAttack;
+                attack.bonus = this.#bonuses.stabAttack;
             }
             else if (vertex.type === "Slash") {
-                accuracy.bonus = this.#bonuses.slashAttack;
+                attack.bonus = this.#bonuses.slashAttack;
             }
             else if (vertex.type === "Crush") {
-                accuracy.bonus = this.#bonuses.crushAttack;
+                attack.bonus = this.#bonuses.crushAttack;
             }
 
             strength.bonus = this.#bonuses.strength;
         }
         else if (vertex.class === "Ranged") {
-            accuracy.stance = 8;
+            attack.stance = 8;
             strength.stance = 8;
 
             if (vertex.style === "Accurate") {
-                accuracy.stance += 3;
+                attack.stance += 3;
             }
             else if (vertex.style === "Rapid") {
                 speed -= 1;
             }
 
-            accuracy.level = Math.floor(boostedLevels.ranged * prayerMultipliers.rangedAttack);
+            attack.level = Math.floor(boostedLevels.ranged * prayerMultipliers.rangedAttack);
             strength.level = Math.floor(boostedLevels.ranged * prayerMultipliers.rangedStrength);
 
-            accuracy.bonus = this.#bonuses.rangedAttack;
+            attack.bonus = this.#bonuses.rangedAttack;
             strength.bonus = this.#bonuses.rangedStrength;
         }
         else if (vertex.class === "Magic") {
-            accuracy.stance = 9;
+            attack.stance = 9;
             strength.stance = 0;
 
             if (!vertex.spell && vertex.style === "Accurate") {
-                accuracy.stance += 2;
+                attack.stance += 2;
             }
             else if (vertex.spell) {
                 speed = 5;
             }
 
-            accuracy.level = Math.floor(boostedLevels.magic * prayerMultipliers.magicAttack);
+            attack.level = Math.floor(boostedLevels.magic * prayerMultipliers.magicAttack);
             strength.level = 0; // Magic level does not provide any inherent bonus to magic damage
 
-            accuracy.bonus = this.#bonuses.magicAttack;
+            attack.bonus = this.#bonuses.magicAttack;
             strength.bonus = this.#bonuses.magicStrength;
         }
         else {
@@ -219,21 +240,21 @@ export class Actor {
         }
 
         return {
-            accuracy,
+            attack,
             strength,
             speed
         };
     }
 
-    getDefendValues (vertex: Vertex) {
+    getDefendValues (vertex: Vertex): DefendValues {
         const boostedLevels = this.#boostedLevels;
         const prayerMultipliers = this.#prayerMultipliers;
 
-        let base;
+        let level;
         let bonus;
         if (vertex.type === "Magic" || vertex.type === "Spell") {
             bonus = this.#bonuses.magicDefence;
-            base = Math.floor(boostedLevels.magic * prayerMultipliers.magicDefence) + 9;
+            level = Math.floor(boostedLevels.magic * prayerMultipliers.magicDefence) + 9;
         }
         else {
             switch (vertex.type) {
@@ -243,17 +264,18 @@ export class Actor {
                 case "Ranged": bonus = this.#bonuses.rangedDefence; break;
             }
 
-            base = Math.floor(boostedLevels.defence * prayerMultipliers.defence) + 9;
+            level = Math.floor(boostedLevels.defence * prayerMultipliers.defence) + 9;
         }
 
         return {
-            base,
+            level,
             bonus
         };
     }
 
     get bonuses () { return this.#bonuses; }
     get boosts () { return this.#boosts; }
+    get combatLevel () { return this.#combatLevel; }
     get equipment () { return this.#equipment; }
     get attributes () { return this.#attributes; }
     get prayers () { return this.#prayers; }
