@@ -12,6 +12,8 @@ const VERZIK_P1_COMBAT_LEVEL = [425, 1040];
  * Summary:
  * Dawnbringer ignores all accuracy and damage bonuses from the attacker's gear or prayers.
  * The base damage (and final damage as a result) is determined by the boosted magic level alone.
+ *
+ * @todo add tests
  */
 export const DawnbringerModifier: Modifier = {
     accuracy () {
