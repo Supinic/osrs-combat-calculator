@@ -55,37 +55,37 @@ export class HitTracker {
     #missChance: Chance;
     #hitChance: Chance;
 
-    #distribution = new Distribution();
-    #extraDists: Distribution[] = [];
+    #multi = false;
+    #distributions: Distribution[] = [new Distribution()];
 
     constructor (accuracy: Chance) {
         this.#missChance = 1 - accuracy;
         this.#hitChance = accuracy;
 
-        this.#distribution.missChance = this.#missChance;
+        this.#distributions[0].missChance = this.#missChance;
     }
 
     storeSingle (hit: Damage, p: Chance) {
-        this.#distribution.store(hit, p);
+        this.#distributions[0].store(hit, p);
     }
 
     storeMultiple (hits: Damage[], accuracy: Chance) {
-        if (hits.length === 1) {
-            console.warn("Applying hit length of 1 in storeMultiple - use storeSingle");
-            return this.storeSingle(hits[0], accuracy);
+        if (this.#distributions.length !== hits.length) {
+            if (!this.#multi) { // Expand to match new hit size
+                for (let i = 1; i < hits.length; i++) {
+                    const dist = new Distribution();
+                    dist.missChance = this.#missChance;
+
+                    this.#distributions.push(dist);
+                }
+            }
+            else {
+                throw new Error(`Mismatched multi-hit length, got ${hits.length}, expected ${this.#distributions.length}`);
+            }
         }
 
-        if (!this.#extraDists) {
-            this.#extraDists = new Array(hits.length - 1).fill(new Distribution());
-        }
-        else if (this.#extraDists.length !== hits.length) {
-            throw new Error(`Mismatched multi-hit length, got ${hits.length}, expected ${this.#extraDists.length}`);
-        }
-
-        this.#distribution.store(hits[0], accuracy);
-
-        for (let i = 1; i < hits.length; i++) {
-            this.#extraDists[i].store(hits[i], accuracy);
+        for (let i = 0; i < hits.length; i++) {
+            this.#distributions[i].store(hits[i], accuracy);
         }
     }
 
@@ -161,8 +161,7 @@ export class HitTracker {
 
     getAverageDamage () {
         let damage = 0;
-        const dists = [this.#distribution, ...this.#extraDists];
-        for (const dist of dists) {
+        for (const dist of this.#distributions) {
             damage += dist.getAverageDamage();
         }
 
@@ -170,11 +169,7 @@ export class HitTracker {
     }
 
     getMaxHitData () {
-        const list = [
-            this.#distribution.maxHit,
-            ...this.#extraDists.map(i => i.maxHit)
-        ];
-
+        const list = this.#distributions.map(i => i.maxHit);
         return {
             max: Math.max(...list),
             sum: list.reduce((acc, cum) => acc + cum, 0),
@@ -187,10 +182,13 @@ export class HitTracker {
     }
 
     clear () {
-        this.#distribution.clear();
-        for (const dist of this.#extraDists) {
+        for (const dist of this.#distributions) {
             dist.clear();
         }
+    }
+
+    debug () {
+        console.log([...this.#distributions.entries()]);
     }
 
     /**
