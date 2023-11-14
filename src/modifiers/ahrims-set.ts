@@ -13,10 +13,10 @@ export const AhrimsSetModifier: Modifier = {
 
         const ahrimsTracker = new HitTracker(acc);
         for (let dmg = 0; dmg <= m1; dmg++) {
-            ahrimsTracker.storeSingle(dmg, normalChance * acc / (m1 + 1));
+            ahrimsTracker.store(dmg, normalChance * acc / (m1 + 1));
         }
         for (let dmg = 0; dmg <= m2; dmg++) {
-            ahrimsTracker.storeSingle(dmg, procChance * acc / (m2 + 1));
+            ahrimsTracker.store(dmg, procChance * acc / (m2 + 1));
         }
 
         combatValues.tracker = ahrimsTracker;

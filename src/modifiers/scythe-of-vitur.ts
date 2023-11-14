@@ -27,7 +27,7 @@ export const ScytheModifier: Modifier = {
         const scytheTracker = new HitTracker(acc);
         for (let dmg = 0; dmg <= maxHit; dmg++) {
             const hits = hitFormula(dmg);
-            scytheTracker.storeMultiple(hits, (acc / (maxHit + 1)));
+            scytheTracker.store(hits, (acc / (maxHit + 1)));
         }
 
         combatValues.tracker = scytheTracker;

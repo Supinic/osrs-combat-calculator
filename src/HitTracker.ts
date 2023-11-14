@@ -65,29 +65,23 @@ export class HitTracker {
         this.#distributions[0].missChance = this.#missChance;
     }
 
-    storeSingle (hit: Damage, p: Chance) {
-        this.#distributions[0].store(hit, p);
-    }
-
-    storeMultiple (hits: Damage[], accuracy: Chance) {
-        if (this.#distributions.length !== hits.length) {
-            if (!this.#multi) { // Expand to match new hit size
-                for (let i = 1; i < hits.length; i++) {
-                    const dist = new Distribution();
-                    dist.missChance = this.#missChance;
-
-                    this.#distributions.push(dist);
-                }
-
-                this.#multi = true;
-            }
-            else {
-                throw new Error(`Mismatched multi-hit length, got ${hits.length}, expected ${this.#distributions.length}`);
-            }
+    store (hits: Damage | Damage[], p: Chance) {
+        if (typeof hits === "number") {
+            return this.#distributions[0].store(hits, p);
         }
 
-        for (let i = 0; i < hits.length; i++) {
-            this.#distributions[i].store(hits[i], accuracy);
+        if (hits.length === 0) {
+            throw new Error("Cannot process an empty list of hits");
+        }
+        else if (hits.length === 1) {
+            return this.#distributions[0].store(hits[0], p);
+        }
+        else {
+            this.#expandCheck(hits.length);
+
+            for (let i = 0; i < hits.length; i++) {
+                this.#distributions[i].store(hits[i], p);
+            }
         }
     }
 
@@ -193,6 +187,25 @@ export class HitTracker {
         console.log([...this.#distributions.entries()]);
     }
 
+    #expandCheck (length: number) {
+        if (this.#distributions.length === length) { // Length checks out, OK
+            return;
+        }
+        else if (this.#multi) { // Already expanded, throw error
+            throw new Error(`Mismatched multi-hit length, got ${length}, expected ${this.#distributions.length}`);
+        }
+
+        // Expand and set the `#multi` flag to `true`
+        for (let i = 1; i < length; i++) {
+            const dist = new Distribution();
+            dist.missChance = this.#missChance;
+
+            this.#distributions.push(dist);
+        }
+
+        this.#multi = true;
+    }
+
     /**
      * Creates a basic damage distribution based on game logic.
      *
@@ -208,7 +221,7 @@ export class HitTracker {
         const dist = new HitTracker(accuracy);
 
         for (let hit: Damage = 0; hit <= maxHit; hit++) {
-            dist.storeSingle(hit, accuracy / (maxHit + 1));
+            dist.store(hit, accuracy / (maxHit + 1));
         }
 
         return dist;
