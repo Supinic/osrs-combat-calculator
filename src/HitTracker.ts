@@ -78,6 +78,8 @@ export class HitTracker {
 
                     this.#distributions.push(dist);
                 }
+
+                this.#multi = true;
             }
             else {
                 throw new Error(`Mismatched multi-hit length, got ${hits.length}, expected ${this.#distributions.length}`);
