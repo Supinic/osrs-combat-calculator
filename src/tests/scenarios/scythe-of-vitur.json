@@ -1,0 +1,85 @@
+{
+  "name": "Scythe of vitur",
+  "setup": {
+    "vertex": {
+      "class": "Melee",
+      "style": "Aggressive",
+      "type": "Slash",
+      "spell": null
+    },
+    "attacker": {
+      "levels": {
+        "attack": 99,
+        "strength": 99
+      },
+      "equipment": {
+        "weapon": {
+          "name": "Scythe of vitur",
+          "bonuses": [70, 110, 30, -6, 0, -2, 8, 10, 0, 0, 75, 0, 0, 0]
+        }
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "name": "Small (1x hit)",
+      "defender": {
+        "size": 1
+      },
+      "expected": {
+        "maxHit": 24,
+        "maxHitList": [24]
+      }
+    },
+    {
+      "name": "Medium (2x hit)",
+      "defender": {
+        "size": 2
+      },
+      "expected": {
+        "maxHit": 24,
+        "maxHitTotal": 36,
+        "maxHitList": [24, 12]
+      }
+    },
+    {
+      "name": "Large (3x hit)",
+      "defender": {
+        "size": 3
+      },
+      "expected": {
+        "maxHit": 24,
+        "maxHitTotal": 42,
+        "maxHitList": [24, 12, 6]
+      }
+    },
+    {
+      "name": "Huge (3x hit)",
+      "defender": {
+        "size": 10
+      },
+      "expected": {
+        "maxHit": 24,
+        "maxHitTotal": 42,
+        "maxHitList": [24, 12, 6]
+      }
+    },
+    {
+      "name": "Maging (doesn't apply)",
+      "vertex": {
+        "class": "Magic",
+        "style": "Accurate",
+        "type": "Spell",
+        "spell": "Fire Strike"
+      },
+      "defender": {
+        "size": 10
+      },
+      "expected": {
+        "maxHit": 8,
+        "maxHitTotal": 8,
+        "maxHitList": [8]
+      }
+    }
+  ]
+}

@@ -3,7 +3,7 @@ import { strictEqual, deepEqual } from "node:assert";
 
 import * as definitions from "./scenarios/index";
 import { Bonuses, BonusList, BonusObject } from "../Bonuses";
-import { Levels, Vertex } from "../Actor";
+import { Attribute, Levels, Vertex } from "../Actor";
 import { BoostName } from "../Boosts";
 import { PrayerName } from "../Prayers";
 import { calculate } from "../index";
@@ -16,6 +16,8 @@ type ActorTestDefinition = {
     boosts?: BoostName[];
     prayers?: PrayerName[];
     equipment?: Record<EquipmentSlot, EquipmentDefinition>;
+    size?: number;
+    attributes?: Attribute[];
 };
 
 type TestDefinition = {
@@ -36,6 +38,7 @@ type TestDefinition = {
             maxHit?: number;
             maxHitProc?: number;
             maxHitList?: number[];
+            maxHitTotal?: number;
             accuracy?: number;
             averageDamage?: number;
             dps?: number;
@@ -68,7 +71,9 @@ for (const definition of Object.values(definitions)) {
                     levels: scenario.attacker?.levels ?? setup.attacker?.levels ?? {},
                     boosts: scenario.attacker?.boosts ?? setup.attacker?.boosts ?? [],
                     prayers: scenario.attacker?.prayers ?? setup.attacker?.prayers ?? [],
-                    equipment: scenario.attacker?.equipment ?? setup.attacker?.equipment ?? {}
+                    equipment: scenario.attacker?.equipment ?? setup.attacker?.equipment ?? {},
+                    size: scenario.attacker?.size ?? setup.attacker?.size ?? 1,
+                    attributes: scenario.attacker?.attributes ?? setup.attacker?.attributes ?? []
                 },
                 defender: {
                     baseBonuses: (Array.isArray(defenderBonuses))
@@ -77,13 +82,17 @@ for (const definition of Object.values(definitions)) {
                     levels: scenario.defender?.levels ?? setup.defender?.levels ?? {},
                     boosts: scenario.defender?.boosts ?? setup.defender?.boosts ?? [],
                     prayers: scenario.defender?.prayers ?? setup.defender?.prayers ?? [],
-                    equipment: scenario.defender?.equipment ?? setup.defender?.equipment ?? {}
+                    equipment: scenario.defender?.equipment ?? setup.defender?.equipment ?? {},
+                    size: scenario.defender?.size ?? setup.defender?.size ?? 1,
+                    attributes: scenario.defender?.attributes ?? setup.defender?.attributes ?? []
                 },
                 vertex
             });
 
             it(scenario.name, function () {
                 const { expected } = scenario;
+                const maxHitData = result.tracker.getMaxHitData();
+
                 if (isNumber(expected.attackRoll)) {
                     strictEqual(result.attackRoll, expected.attackRoll, "Incorrect attack roll");
                 }
@@ -96,8 +105,11 @@ for (const definition of Object.values(definitions)) {
                 if (isNumber(expected.maxHitProc)) {
                     strictEqual(result.maxHitProc, expected.maxHitProc, "Incorrect proc max hit");
                 }
+                if (isNumber(expected.maxHitTotal)) {
+                    strictEqual(maxHitData.sum, expected.maxHitTotal, "Incorrect total max hit sum");
+                }
                 if (expected.maxHitList) {
-                    deepEqual(result.tracker.getMaxHitData().list, expected.maxHitList, "Incorrect max hit list");
+                    deepEqual(maxHitData.list, expected.maxHitList, "Incorrect max hit list");
                 }
                 if (isNumber(expected.accuracy)) {
                     const rounded = round(result.accuracy, 5);
