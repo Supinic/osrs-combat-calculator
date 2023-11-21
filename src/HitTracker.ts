@@ -28,7 +28,11 @@ class Distribution extends Map<Damage, Chance> {
     }
 
     clone () {
-        return new Distribution(this);
+        const clone = new Distribution(this);
+        clone.#maxHit = this.#maxHit;
+        clone.#missChance = this.#missChance;
+
+        return clone;
     }
 
     getAverageDamage () {
@@ -184,7 +188,7 @@ export class HitTracker {
     }
 
     debug () {
-        console.log([...this.#distributions.entries()]);
+        return this.#distributions.map(i => [...i.entries()]);
     }
 
     #expandCheck (length: number) {
@@ -225,6 +229,34 @@ export class HitTracker {
         }
 
         return dist;
+    }
+
+    static doubleHits (existing: HitTracker, procChance: number): HitTracker {
+        const tracker = new HitTracker(existing.getAccuracy());
+        const extraDists = [];
+
+        for (const dist of existing.#distributions) {
+            // 25% miss chance = 75% hit chance, 10% proc chance = 7.5% hit, 92.5% miss
+            const newAccuracy = (1 - dist.missChance) * procChance;
+            const newMissChance = (1 - newAccuracy);
+
+            const hits = [...dist.keys()];
+            const clone = new Distribution();
+            clone.missChance = newMissChance;
+
+            for (const hit of hits) {
+                clone.store(hit, newAccuracy / hits.length);
+            }
+
+            extraDists.push(clone);
+        }
+
+        tracker.#distributions = [
+            ...existing.#distributions.map(i => i.clone()),
+            ...extraDists
+        ];
+
+        return tracker;
     }
 }
 
