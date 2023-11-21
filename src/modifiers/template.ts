@@ -18,6 +18,8 @@ export default interface TemplateModifier {
     attackSpeed?: (speed: number, context: Context) => number;
     damageDistribution?: (tracker: CombatValues, context: Context) => CombatValues;
 
+    actors?: (context: Context) => void;
+
     // specialAttack?: (baseTracker: HitTracker, context: Context) => SpecialHitTracker;
 
     isApplied: (context: Context) => boolean;

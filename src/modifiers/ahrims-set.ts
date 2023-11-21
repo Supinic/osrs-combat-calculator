@@ -1,27 +1,31 @@
 import Modifier from "./template";
 import { HitTracker } from "../HitTracker";
 
-// Ahrim's set effect: 25% chance to raise your max hit by 30%
+/**
+ * Ahrim's regular set effect:
+ * Not simulated: Magic attacks have a 25% chance of lowering the enemy's Strength by five levels repeatedly.
+ *
+ * Ahrim's enhanced set effect:
+ * Not simulated: Allows player to autocast Ancient Magicks.
+ * Simulated: 25% chance for any combat spell to deal a hit with 30% increased damage
+ */
 const procChance = 0.25;
 const normalChance = (1 - procChance);
 
 export const AhrimsSetModifier: Modifier = {
     damageDistribution (combatValues) {
-        const m1 = combatValues.maxHit;
-        const m2 = Math.floor(m1 * 1.30);
+        const maxHit = combatValues.maxHit;
         const acc = combatValues.accuracy;
-
         const ahrimsTracker = new HitTracker(acc);
-        for (let dmg = 0; dmg <= m1; dmg++) {
-            ahrimsTracker.store(dmg, normalChance * acc / (m1 + 1));
-        }
-        for (let dmg = 0; dmg <= m2; dmg++) {
-            ahrimsTracker.store(dmg, procChance * acc / (m2 + 1));
+
+        for (let dmg = 0; dmg <= maxHit; dmg++) {
+            ahrimsTracker.store(dmg, normalChance * acc / (maxHit + 1));
+            ahrimsTracker.store(Math.floor(dmg * 1.30), procChance * acc / (maxHit + 1));
         }
 
         combatValues.tracker = ahrimsTracker;
-        combatValues.maxHit = m1;
-        combatValues.maxHitProc = m2;
+        combatValues.maxHit = maxHit;
+        combatValues.maxHitProc = Math.floor(maxHit * 1.30);
 
         return combatValues;
     },

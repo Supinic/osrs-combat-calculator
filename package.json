@@ -9,6 +9,7 @@
     "dev": "yarn run build && node ./dist/index.js",
     "devtools": "yarn run build && node --inspect-brk=0.0.0.0:10005 ./dist/index.js",
     "test": "yarn run build && node --test",
+    "test-combat": "yarn run build && node --test dist/tests/scenarios.test.js",
     "test-debug": "yarn run build && node --test --inspect-brk=0.0.0.0:10005"
   },
   "keywords": [],
