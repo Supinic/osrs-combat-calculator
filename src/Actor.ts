@@ -1,9 +1,17 @@
 import spells from "./game-data/spells.json";
+import flags from "./game-data/flags.json";
+import miscBonuses from "./game-data/misc-bonuses.json";
 
 import { Bonuses, BonusList } from "./Bonuses";
 import { InputSlot, Slot, Equipment, Definition as EquipmentDefinition } from "./Equipment";
 import applyBoosts, { BoostName } from "./Boosts";
 import getPrayerMultipliers, { BoostableStat, PrayerName } from "./Prayers";
+
+type FlagName = keyof typeof flags;
+export type Flags = Set<FlagName>;
+
+type MiscBonusName = keyof typeof miscBonuses;
+export type MiscBonuses = Record<MiscBonusName, number>;
 
 type Level = number;
 export type Levels = {
@@ -18,7 +26,6 @@ export type Levels = {
 };
 
 export type EquipmentDescriptor = Record<Slot, Equipment | null>;
-export type Flags = Record<string, boolean>;
 
 export type Attribute = "dragon"
     | "fiery" | "spectral" | "kalphite"
@@ -36,6 +43,8 @@ export type ActorData = {
     prayers?: Iterable<PrayerName>;
     boosts?: Iterable<BoostName>;
     attributes?: Iterable<Attribute>;
+    flags?: Iterable<FlagName>;
+    miscBonuses?: Partial<Record<MiscBonusName, number>>;
 };
 
 export type SpellName = keyof typeof spells;
@@ -101,7 +110,8 @@ export class Actor {
     #boosts: Set<BoostName> = new Set();
     #prayers: Set<PrayerName> = new Set();
     #attributes: Set<Attribute> = new Set();
-    #flags: Flags = {};
+    #flags: Flags = new Set();
+    #miscBonuses: Partial<MiscBonuses> = {};
 
     constructor (data: ActorData) {
         this.#id = data.id ?? -1;
@@ -149,6 +159,12 @@ export class Actor {
         }
         if (data.attributes) {
             this.#attributes = new Set(data.attributes);
+        }
+        if (data.flags) {
+            this.#flags = new Set(data.flags);
+        }
+        if (data.miscBonuses) {
+            this.#miscBonuses = data.miscBonuses;
         }
 
         this.#boostedLevels = applyBoosts(this.#levels, this.#boosts);

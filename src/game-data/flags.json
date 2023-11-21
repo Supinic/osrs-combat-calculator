@@ -1,0 +1,14 @@
+{
+  "leagues4-tier3-melee": {
+    "description": "Brawler's Resolve"
+  },
+  "leagues4-tier3-ranged": {
+    "description": "Archer's Embrace"
+  },
+  "leagues4-tier3-magic": {
+    "description": "Superior Sorcerer"
+  },
+  "leagues4-berserker": {},
+  "leagues4-soul-stealer": {},
+  "leagues4-guardian": {}
+}

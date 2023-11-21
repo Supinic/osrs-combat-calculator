@@ -26,6 +26,8 @@ export function calculate (options: Input) {
     const { vertex } = options;
     const modifiers = new ModifierManager(attacker, defender, vertex);
 
+    modifiers.modifyActors();
+
     const baseAtk = attacker.getAttackValues(vertex);
     const baseDef = defender.getDefendValues(vertex);
     const atk = modifiers.modifyAttackValues(baseAtk);

@@ -139,6 +139,14 @@ export default class ModifierManager {
         return result;
     }
 
+    modifyActors () {
+        for (const modifier of this.#list) {
+            if (typeof modifier.actors === "function") {
+                modifier.actors(this.#context);
+            }
+        }
+    }
+
     getFlatMaxHitBonus (): number {
         let bonus = 0;
         for (const modifier of this.#list) {
