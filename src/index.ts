@@ -81,6 +81,7 @@ export function calculate (options: Input) {
         dps,
         maxHit: result.maxHit,
         maxHitProc: result.maxHitProc ?? null,
-        tracker: result.tracker
+        tracker: result.tracker,
+        attackSpeed: atk.speed
     };
 }
