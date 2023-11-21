@@ -1,0 +1,54 @@
+{
+  "name": "Leagues 4 Relics",
+  "setup": {
+    "attacker": {
+      "levels": {
+        "attack": 99,
+        "strength": 99,
+        "ranged": 99,
+        "magic": 99
+      }
+    },
+    "defender": {
+      "levels": {
+        "hitpoints": 1000
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "name": "Brawler's Resolve - bonuses",
+      "attacker": {
+        "flags": ["leagues4-tier3-melee"]
+      },
+      "vertex": {
+        "class": "Melee",
+        "style": "Aggressive",
+        "type": "Crush",
+        "spell": null
+      },
+      "expected": {
+        "attackSpeed": 2,
+        "attackRoll": 10272,
+        "maxHit": 11,
+        "maxHitProc": 22
+      }
+    },
+    {
+      "name": "Brawler's Resolve - no effect if maging",
+      "attacker": {
+        "flags": ["leagues4-tier3-melee"]
+      },
+      "vertex": {
+        "class": "Magic",
+        "style": "Accurate",
+        "type": "Spell",
+        "spell": "Fire Surge"
+      },
+      "expected": {
+        "attackSpeed": 5,
+        "attackRoll": 6912
+      }
+    }
+  ]
+}

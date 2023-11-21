@@ -7,10 +7,10 @@ import { InputSlot, Slot, Equipment, Definition as EquipmentDefinition } from ".
 import applyBoosts, { BoostName } from "./Boosts";
 import getPrayerMultipliers, { BoostableStat, PrayerName } from "./Prayers";
 
-type FlagName = keyof typeof flags;
+export type FlagName = keyof typeof flags;
 export type Flags = Set<FlagName>;
 
-type MiscBonusName = keyof typeof miscBonuses;
+export type MiscBonusName = keyof typeof miscBonuses;
 export type MiscBonuses = Record<MiscBonusName, number>;
 
 type Level = number;

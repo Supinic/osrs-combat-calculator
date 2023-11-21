@@ -3,7 +3,7 @@ import { strictEqual, deepEqual } from "node:assert";
 
 import * as definitions from "./scenarios/index";
 import { Bonuses, BonusList, BonusObject } from "../Bonuses";
-import { Attribute, Levels, Vertex } from "../Actor";
+import { Attribute, FlagName, Levels, Vertex } from "../Actor";
 import { BoostName } from "../Boosts";
 import { PrayerName } from "../Prayers";
 import { calculate } from "../index";
@@ -18,6 +18,7 @@ type ActorTestDefinition = {
     equipment?: Record<EquipmentSlot, EquipmentDefinition>;
     size?: number;
     attributes?: Attribute[];
+    flags?: FlagName[];
 };
 
 type TestDefinition = {
@@ -42,6 +43,7 @@ type TestDefinition = {
             accuracy?: number;
             averageDamage?: number;
             dps?: number;
+            attackSpeed?: number;
         }
     }[];
 };
@@ -74,7 +76,8 @@ describe("Combat scenarios", () => {
                         prayers: scenario.attacker?.prayers ?? setup.attacker?.prayers ?? [],
                         equipment: scenario.attacker?.equipment ?? setup.attacker?.equipment ?? {},
                         size: scenario.attacker?.size ?? setup.attacker?.size ?? 1,
-                        attributes: scenario.attacker?.attributes ?? setup.attacker?.attributes ?? []
+                        attributes: scenario.attacker?.attributes ?? setup.attacker?.attributes ?? [],
+                        flags: scenario.attacker?.flags ?? setup.attacker?.flags ?? []
                     },
                     defender: {
                         baseBonuses: (Array.isArray(defenderBonuses))
@@ -85,7 +88,8 @@ describe("Combat scenarios", () => {
                         prayers: scenario.defender?.prayers ?? setup.defender?.prayers ?? [],
                         equipment: scenario.defender?.equipment ?? setup.defender?.equipment ?? {},
                         size: scenario.defender?.size ?? setup.defender?.size ?? 1,
-                        attributes: scenario.defender?.attributes ?? setup.defender?.attributes ?? []
+                        attributes: scenario.defender?.attributes ?? setup.defender?.attributes ?? [],
+                        flags: scenario.defender?.flags ?? setup.defender?.flags ?? []
                     },
                     vertex
                 });
@@ -106,12 +110,17 @@ describe("Combat scenarios", () => {
                     if (isNumber(expected.maxHitProc)) {
                         strictEqual(result.maxHitProc, expected.maxHitProc, "Incorrect proc max hit");
                     }
+                    if (isNumber(expected.attackSpeed)) {
+                        strictEqual(result.attackSpeed, expected.attackSpeed, "Incorrect attack speed");
+                    }
+
                     if (isNumber(expected.maxHitTotal)) {
                         strictEqual(maxHitData.sum, expected.maxHitTotal, "Incorrect total max hit sum");
                     }
                     if (expected.maxHitList) {
                         deepEqual(maxHitData.list, expected.maxHitList, "Incorrect max hit list");
                     }
+
                     if (isNumber(expected.accuracy)) {
                         const rounded = round(result.accuracy, 5);
                         strictEqual(rounded, expected.accuracy, "Incorrect accuracy");
