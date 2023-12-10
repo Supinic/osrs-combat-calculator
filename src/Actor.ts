@@ -2,7 +2,7 @@ import spells from "./game-data/spells.json";
 import flags from "./game-data/flags.json";
 import miscBonuses from "./game-data/misc-bonuses.json";
 
-import { Bonuses, BonusList } from "./Bonuses";
+import { Bonuses, BonusLike } from "./Bonuses";
 import { InputSlot, Slot, Equipment, Definition as EquipmentDefinition } from "./Equipment";
 import applyBoosts, { BoostName } from "./Boosts";
 import getPrayerMultipliers, { BoostableStat, PrayerName } from "./Prayers";
@@ -39,7 +39,7 @@ export type ActorData = {
     combatLevel?: number;
     equipment?: Partial<Record<InputSlot, EquipmentDefinition>>;
     levels?: Partial<Levels>;
-    baseBonuses?: BonusList;
+    baseBonuses?: BonusLike;
     prayers?: Iterable<PrayerName>;
     boosts?: Iterable<BoostName>;
     attributes?: Iterable<Attribute>;

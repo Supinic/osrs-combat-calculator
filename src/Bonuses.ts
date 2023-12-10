@@ -1,7 +1,7 @@
 type Bonus = number;
 export type BonusList = [Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus, Bonus];
 
-const bonusIndex = {
+export const bonusIndex = {
     stabAttack: 0,
     slashAttack: 1,
     crushAttack: 2,
@@ -20,13 +20,17 @@ const bonusIndex = {
 
 export type BonusType = keyof typeof bonusIndex;
 export type BonusObject = Record<BonusType, number>;
+export type BonusLike = BonusList | Partial<BonusObject>;
 
 export class Bonuses {
     #list: BonusList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-    constructor (input?: BonusList) {
-        if (input) {
+    constructor (input?: BonusLike) {
+        if (Array.isArray(input)) {
             this.#list = [...input];
+        }
+        else if (input && typeof input === "object") {
+            this.#list = Bonuses.fromObject(input);
         }
     }
 
